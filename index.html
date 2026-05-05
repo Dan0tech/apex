@@ -268,17 +268,15 @@ button:active{
   max-width:92%;
   margin:26px auto -12px;
   padding:0 16px;
-  color:var(--title);
-  font-family:var(--ui-font);
-  font-weight:900;
+  color:#9b8bc7;
+  font-weight:950;
   font-size:16px;
   text-align:center;
   background:linear-gradient(90deg,rgba(8,13,30,.02),rgba(8,13,30,.96) 18%,rgba(8,13,30,.96) 82%,rgba(8,13,30,.02));
   text-shadow:
-    0 0 10px rgba(215,193,255,.42),
+    0 0 10px rgba(155,139,199,.36),
     0 2px 6px rgba(0,0,0,.55);
   direction:ltr;
-  letter-spacing:.2px;
 }
 
 .card{
@@ -319,6 +317,7 @@ button:active{
 .red{color:var(--red)}
 .cyan{color:var(--cyan)}
 .muted{color:var(--muted)}
+.sky{color:#8fd8ff}
 
 .dns-row{
   display:grid;
@@ -1205,7 +1204,7 @@ function renderDnsRows(rows){
   const shown=dnsExpanded ? rows : rows.slice(0,10);
 
   const html=[
-    row('Shown',dnsExpanded ? `All ${rows.length} DNS records` : `10 of ${rows.length} DNS records`,'yellow'),
+    row('Shown',dnsExpanded ? ` All ${rows.length} DNS records` : ` 10 of ${rows.length} DNS records`,'midnight blue'),
     ...shown.map(r=>dnsRow(r))
   ];
 
@@ -1232,9 +1231,9 @@ function sparkleSeeMore(btn){
     s.className='sparkle';
     s.style.left=x+'%';
     s.style.top=y+'%';
-    s.style.animationDelay=(i*45)+'ms';
+    s.style.animationDelay=(i*35)+'ms';
     btn.appendChild(s);
-    setTimeout(()=>s.remove(),900);
+    setTimeout(()=>s.remove(),500);
   });
 }
 
@@ -1268,12 +1267,12 @@ async function run(){
   updateDisguise(0);
   dnsExpanded=false;
 
-  card('geo','RUNNING',[row('Status','Checking exit IP...','yellow')]);
-  card('browser','RUNNING',[row('Status','Collecting browser signals...','yellow')]);
-  card('latency','RUNNING',[row('Status','Scanning all DNS records...','yellow')]);
-  card('speed','RUNNING',[row('Status','Waiting...','yellow')]);
+  card('geo','RUNNING',[row('Status','Checking exit IP...','cyan')]);
+  card('browser','RUNNING',[row('Status','Collecting browser signals...','cyan')]);
+  card('latency','RUNNING',[row('Status','Scanning all DNS records...','cyan')]);
+  card('speed','RUNNING',[row('Status','Waiting...','cyan ')]);
   $('issues').innerHTML='<div class="issue"><p>RUNNING</p></div>';
-  card('final','RUNNING',[row('Status','Not ready','yellow')]);
+  card('final','RUNNING',[row('Status','Not ready','cyan')]);
 
   const data=await getGeoData();
   setBar(30);
@@ -1288,9 +1287,9 @@ async function run(){
   renderIssues(problems);
 
   card('geo','VPN EXIT GEO',[
-    row('IP',data.ip,'green'),
+    row('IP',data.ip,'sky'),
     row('IP Version',version,version==='IPv6'?'cyan':'green'),
-    row('Country',country,'green'),
+    row('Country',country,'cyan'),
     row('Region',data.region,'green'),
     row('City',data.city,'green'),
     row('Timezone',data.timezone,'cyan'),
