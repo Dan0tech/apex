@@ -1356,8 +1356,29 @@ async function run(){
   launchSpaceship();
 }
 
-$('run').addEventListener('click',run);
-run();
+window.addEventListener('DOMContentLoaded',()=>{
+  const runBtn=document.getElementById('run');
+
+  if(runBtn){
+    runBtn.addEventListener('click',()=>{
+      run().catch(err=>{
+        console.error(err);
+        const final=document.getElementById('final');
+        if(final){
+          final.innerHTML='<div class="row"><div class="k">Error</div><div class="v red">'+String(err.message||err)+'</div></div>';
+        }
+      });
+    });
+  }
+
+  run().catch(err=>{
+    console.error(err);
+    const final=document.getElementById('final');
+    if(final){
+      final.innerHTML='<div class="row"><div class="k">Error</div><div class="v red">'+String(err.message||err)+'</div></div>';
+    }
+  });
+});
 </script>
 </body>
 </html>
