@@ -921,12 +921,13 @@ button:not(.speedtest-go):not(.see-more):active{
   transform:none;
 }
 
+/* FLOATING SPEED JUMP */
 .speed-jump{
   position:fixed;
   right:22px;
   bottom:calc(28px + env(safe-area-inset-bottom));
-  width:48px;
-  height:74px;
+  width:58px;
+  height:128px;
   z-index:9998;
   display:block;
   text-decoration:none;
@@ -939,8 +940,114 @@ button:not(.speedtest-go):not(.see-more):active{
   animation:speedJumpFloat 1.18s ease-in-out infinite;
 }
 
-.speed-jump::before{
+.speed-jump-rpm-shell{
+  position:absolute;
+  left:50%;
+  bottom:78px;
+  width:58px;
+  height:58px;
+  display:block;
+  overflow:hidden;
+  transform:translateX(-50%);
+  border-radius:18px;
+  border:1px solid rgba(226,194,255,.58);
+  background:
+    linear-gradient(180deg, rgba(78,36,124,.18), rgba(26,14,46,.12)),
+    rgba(8,13,30,.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.44),
+    inset 0 -12px 20px rgba(62,24,108,.34),
+    inset 0 0 16px rgba(191,124,255,.12),
+    0 0 12px rgba(178,104,255,.54),
+    0 0 24px rgba(157,83,255,.34),
+    0 0 36px rgba(133,63,255,.18);
+  backdrop-filter:blur(6px) saturate(170%);
+  -webkit-backdrop-filter:blur(6px) saturate(170%);
+  pointer-events:none;
+  user-select:none;
+  transition:
+    opacity .32s ease,
+    transform .32s ease,
+    filter .32s ease;
+}
+
+.speed-jump-rpm-shell::before{
   content:"";
+  position:absolute;
+  left:8%;
+  right:8%;
+  top:4px;
+  height:30%;
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(243,220,255,.18) 56%,rgba(255,255,255,.02));
+  z-index:3;
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+
+.speed-jump-rpm-shell::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 20% 12%, rgba(255,255,255,.82) 0 5%, rgba(219,166,255,.48) 6%, transparent 24%),
+    radial-gradient(circle at 84% 86%, rgba(255,255,255,.70) 0 4%, rgba(194,114,255,.46) 5%, transparent 22%),
+    radial-gradient(circle at 18% 88%, rgba(150,78,255,.20), transparent 28%),
+    linear-gradient(135deg, rgba(206,142,255,.36), rgba(58,30,102,.10) 42%, rgba(173,96,255,.34));
+  opacity:.64;
+  box-shadow:
+    inset 0 0 0 1px rgba(243,230,255,.34),
+    inset 4px 4px 10px rgba(223,187,255,.24),
+    inset -6px -6px 14px rgba(145,78,255,.30),
+    0 0 14px rgba(182,109,255,.42),
+    0 0 26px rgba(151,80,255,.28);
+  mix-blend-mode:screen;
+}
+
+.speed-jump-rpm{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border:0;
+  outline:0;
+  background:transparent;
+  pointer-events:none;
+  user-select:none;
+  border-radius:inherit;
+  opacity:1;
+  position:relative;
+  z-index:1;
+}
+
+.speed-jump.is-up .speed-jump-rpm-shell{
+  opacity:0;
+  transform:translateX(-50%) translateY(8px) scale(.84);
+  filter:blur(2px);
+}
+
+.speed-jump-arrow-wrap{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  width:48px;
+  height:74px;
+  margin:auto;
+  display:block;
+  transform:rotate(0deg);
+  transform-origin:center center;
+  transition:transform .28s ease;
+}
+
+.speed-jump.is-up .speed-jump-arrow-wrap{
+  transform:rotate(180deg);
+}
+
+.speed-jump-dots{
   position:absolute;
   left:50%;
   bottom:43px;
@@ -1137,6 +1244,18 @@ button:not(.speedtest-go):not(.see-more):active{
   .speed-jump{
     right:18px;
     bottom:calc(24px + env(safe-area-inset-bottom));
+    width:54px;
+    height:120px;
+  }
+
+  .speed-jump-rpm-shell{
+    width:52px;
+    height:52px;
+    bottom:74px;
+    border-radius:16px;
+  }
+
+  .speed-jump-arrow-wrap{
     width:44px;
     height:70px;
   }
@@ -1189,6 +1308,24 @@ button:not(.speedtest-go):not(.see-more):active{
     font-size:20px;
   }
 
+  .speed-jump{
+    right:14px;
+    width:50px;
+    height:116px;
+  }
+
+  .speed-jump-rpm-shell{
+    width:48px;
+    height:48px;
+    bottom:72px;
+    border-radius:15px;
+  }
+
+  .speed-jump-arrow-wrap{
+    width:42px;
+    height:68px;
+  }
+
   .spaceship-fly{width:82px;height:82px}
 }
 
@@ -1229,8 +1366,14 @@ button:not(.speedtest-go):not(.see-more):active{
 
 <body>
 <a href="#speedtestTarget" class="speed-jump" id="speedJump" aria-label="Go to speedtest">
-  <span class="speed-jump-shaft"></span>
-  <span class="speed-jump-head"></span>
+  <span class="speed-jump-rpm-shell" aria-hidden="true">
+    <img class="speed-jump-rpm" src="https://prodigits.co.uk/pthumbs/screensavers/down/cars-transport/rpm_vpswxwnl.gif" alt="">
+  </span>
+  <span class="speed-jump-arrow-wrap" aria-hidden="true">
+    <span class="speed-jump-dots"></span>
+    <span class="speed-jump-shaft"></span>
+    <span class="speed-jump-head"></span>
+  </span>
 </a>
 
 <div class="wrap">
@@ -1412,12 +1555,34 @@ function scheduleBannerFit(){
   });
 }
 
+function isSpeedtestReached(){
+  const target=$('speedtestTarget');
+  if(!target) return false;
+  const rect=target.getBoundingClientRect();
+  return rect.top <= window.innerHeight * 0.38;
+}
+
+function updateSpeedJumpDirection(){
+  const jump=$('speedJump');
+  if(!jump) return;
+  const up=isSpeedtestReached();
+  jump.classList.toggle('is-up',up);
+  jump.setAttribute('aria-label',up ? 'Go to top' : 'Go to speedtest');
+}
+
 function scrollToSpeedtest(){
   const target=$('speedtestTarget');
   if(!target) return;
   target.scrollIntoView({
     behavior:'smooth',
     block:'start'
+  });
+}
+
+function scrollToTopPage(){
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
   });
 }
 
@@ -2194,18 +2359,37 @@ window.addEventListener('DOMContentLoaded',()=>{
   buildSpeedGauge();
   resetSpeedTestVisual();
   scheduleBannerFit();
+  updateSpeedJumpDirection();
 
   if(document.fonts && document.fonts.ready){
     document.fonts.ready.then(scheduleBannerFit).catch(scheduleBannerFit);
   }
 
-  window.addEventListener('resize',scheduleBannerFit,{passive:true});
-  window.addEventListener('orientationchange',scheduleBannerFit);
-  window.addEventListener('load',scheduleBannerFit);
+  window.addEventListener('resize',()=>{
+    scheduleBannerFit();
+    updateSpeedJumpDirection();
+  },{passive:true});
+
+  window.addEventListener('orientationchange',()=>{
+    scheduleBannerFit();
+    updateSpeedJumpDirection();
+  });
+
+  window.addEventListener('load',()=>{
+    scheduleBannerFit();
+    updateSpeedJumpDirection();
+  });
+
+  window.addEventListener('scroll',updateSpeedJumpDirection,{passive:true});
 
   $('speedJump').addEventListener('click',e=>{
     e.preventDefault();
-    scrollToSpeedtest();
+
+    if($('speedJump').classList.contains('is-up')){
+      scrollToTopPage();
+    }else{
+      scrollToSpeedtest();
+    }
   });
 
   $('run').addEventListener('click',()=>{
