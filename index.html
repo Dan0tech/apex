@@ -19,7 +19,7 @@
   --line:rgba(190,200,255,.24);
   --lav:#746f9f;
   --lav2:#efe6ff;
-  --title:#d7c1ff;
+  --title:#9b8bc7;
   --cyan:#25e5e5;
   --purple:#b889ff;
   --green:#49e06f;
@@ -28,6 +28,7 @@
   --orange:#ff8a4b;
   --muted:#a9b0d0;
   --page-width:736px;
+
   --fa-font:"Noto Nastaliq Urdu", serif;
   --ui-font:"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono-font:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -35,8 +36,7 @@
 
 *{box-sizing:border-box}
 
-html,
-body{
+html,body{
   margin:0;
   width:100%;
   min-height:100%;
@@ -110,7 +110,8 @@ body{
 .card,
 .note,
 .issue,
-.disguise-card{
+.disguise-card,
+.speedtest-card{
   background:rgba(8,13,30,.52);
   border:1px solid var(--line);
   border-radius:20px;
@@ -136,7 +137,7 @@ body{
 .dots b:nth-child(2){color:#f0d45b}
 .dots b:nth-child(3){color:#49e06f}
 
-button{
+button:not(.speedtest-go):not(.see-more){
   width:100%;
   border:1px solid rgba(255,255,255,.42);
   color:white;
@@ -165,7 +166,7 @@ button{
   overflow:hidden;
 }
 
-button::before{
+button:not(.speedtest-go):not(.see-more)::before{
   content:"";
   position:absolute;
   left:7%;
@@ -177,7 +178,7 @@ button::before{
   pointer-events:none;
 }
 
-button::after{
+button:not(.speedtest-go):not(.see-more)::after{
   content:"";
   position:absolute;
   inset:1px;
@@ -186,7 +187,7 @@ button::after{
   pointer-events:none;
 }
 
-button:active{
+button:not(.speedtest-go):not(.see-more):active{
   transform:scale(.985);
   filter:brightness(.94);
 }
@@ -268,7 +269,7 @@ button:active{
   max-width:92%;
   margin:26px auto -12px;
   padding:0 16px;
-  color:#9b8bc7;
+  color:var(--title);
   font-weight:950;
   font-size:16px;
   text-align:center;
@@ -402,32 +403,42 @@ button:active{
 .dns-best .dns-ping{color:var(--green)}
 
 .see-more{
-  width:100%;
-  border:0;
-  background:transparent;
-  color:rgba(200,205,225,.72);
-  font-family:var(--ui-font);
-  font-size:13px;
-  font-weight:700;
-  padding:12px;
-  margin:0;
-  text-align:center;
-  box-shadow:none;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
-  border-radius:0;
-  cursor:pointer;
-  text-shadow:none;
-  position:relative;
-  overflow:visible;
+  all:unset !important;
+  display:block !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+  padding:14px 8px 12px !important;
+  color:rgba(205,210,228,.78) !important;
+  font-family:var(--ui-font) !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  letter-spacing:.01em !important;
+  cursor:pointer !important;
+  user-select:none !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  border:0 !important;
+  margin:0 !important;
+  border-radius:0 !important;
+  text-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  position:relative !important;
+  overflow:visible !important;
 }
 
 .see-more::before,
-.see-more::after{display:none}
+.see-more::after{
+  content:none !important;
+  display:none !important;
+}
 
+.see-more:hover{color:rgba(228,232,244,.92) !important}
 .see-more:active{
-  transform:none;
-  filter:none;
+  opacity:.82 !important;
+  transform:none !important;
+  filter:none !important;
 }
 
 .see-more .sparkle{
@@ -445,9 +456,14 @@ button:active{
   animation:sparklePop .7s ease-out forwards;
 }
 
+.see-more-wrap{
+  position:relative;
+}
+
 .see-more .sparkle::before,
 .see-more .sparkle::after{
-  content:"";
+  content:"" !important;
+  display:block !important;
   position:absolute;
   inset:-4px;
   background:
@@ -601,6 +617,299 @@ button:active{
   text-align:right;
 }
 
+/* SPEEDTEST */
+.speedtest-card{
+  margin:10px 0 20px;
+  padding:24px 14px 22px;
+  overflow:hidden;
+  position:relative;
+}
+
+.speedtest-head{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  direction:ltr;
+  color:#e7ebff;
+  font-weight:900;
+  font-size:clamp(22px,4.8vw,28px);
+  letter-spacing:.02em;
+  margin-bottom:8px;
+}
+
+.speedtest-logo{
+  position:relative;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:5px solid rgba(220,225,255,.8);
+  border-right-color:transparent;
+  transform:rotate(-35deg);
+  box-shadow:0 0 10px rgba(255,255,255,.08);
+}
+
+.speedtest-gauge-shell{
+  position:relative;
+  width:min(100%,330px);
+  height:438px;
+  margin:0 auto;
+}
+
+.speedtest-svg{
+  display:block;
+  width:100%;
+  height:auto;
+  overflow:visible;
+}
+
+.speed-arc-bg{
+  fill:none;
+  stroke:rgba(115,135,220,.48);
+  stroke-width:22;
+  stroke-linecap:round;
+}
+
+.speed-arc-active{
+  fill:none;
+  stroke:url(#speedArcGradient);
+  stroke-width:22;
+  stroke-linecap:round;
+  filter:drop-shadow(0 0 9px rgba(68,222,255,.58)) drop-shadow(0 0 18px rgba(187,118,255,.34));
+  transition:stroke-dashoffset .12s linear;
+}
+
+.speed-tick{
+  stroke:rgba(197,205,245,.22);
+  stroke-width:2.5;
+  stroke-linecap:round;
+}
+
+.speed-tick.major{
+  stroke:rgba(255,255,255,.92);
+  stroke-width:4.6;
+}
+
+.speed-label{
+  fill:rgba(232,236,255,.92);
+  font-family:var(--ui-font);
+  font-weight:800;
+  text-anchor:middle;
+  dominant-baseline:middle;
+  user-select:none;
+}
+
+.speed-label.major{
+  font-size:18px;
+}
+
+.speed-label.minor{
+  font-size:10px;
+  fill:rgba(232,236,255,.85);
+}
+
+.speed-needle{
+  fill:url(#needleGradient);
+  filter:drop-shadow(0 0 8px rgba(255,138,75,.78)) drop-shadow(0 0 16px rgba(255,138,75,.26));
+}
+
+.speed-needle-cap{
+  fill:#f2f4ff;
+  filter:drop-shadow(0 0 7px rgba(255,255,255,.42));
+}
+
+.speed-value-layer{
+  position:absolute;
+  left:50%;
+  top:276px;
+  transform:translate(-50%,-50%);
+  width:160px;
+  text-align:center;
+  pointer-events:none;
+}
+
+.speed-value{
+  font-size:clamp(44px,10.5vw,64px);
+  line-height:.9;
+  font-weight:300;
+  color:#ffffff;
+  letter-spacing:-.05em;
+  text-shadow:0 0 10px rgba(255,255,255,.10);
+}
+
+.speed-unit{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:6px;
+  direction:ltr;
+  font-size:clamp(16px,3.6vw,22px);
+  color:#e7ebff;
+  font-weight:800;
+}
+
+.speed-unit .down{
+  width:34px;
+  height:34px;
+  display:inline-grid;
+  place-items:center;
+  border-radius:50%;
+  font-size:22px;
+  color:#22ecff;
+  border:2px solid rgba(37,229,229,.74);
+  box-shadow:
+    0 0 12px rgba(37,229,229,.48),
+    inset 0 0 12px rgba(37,229,229,.16);
+}
+
+.speed-ping{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  direction:ltr;
+  font-size:12px;
+  font-weight:700;
+  color:rgba(220,225,245,.78);
+}
+
+.speed-ping .ping-ms{
+  opacity:.75;
+}
+
+.speed-ping .ping-icon{
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  display:inline-grid;
+  place-items:center;
+  color:#f0d45b;
+  border:2px solid rgba(240,212,91,.72);
+  box-shadow:
+    0 0 8px rgba(240,212,91,.28),
+    inset 0 0 8px rgba(240,212,91,.12);
+  font-size:13px;
+}
+
+.speed-ping .ping-value{
+  color:#f4f6ff;
+  font-size:12px;
+  font-weight:800;
+}
+
+.speed-status{
+  position:absolute;
+  left:50%;
+  top:350px;
+  transform:translateX(-50%);
+  width:220px;
+  text-align:center;
+  font-size:6px;
+  font-weight:800;
+  color:rgba(200,208,235,.70);
+  letter-spacing:.02em;
+  line-height:1.2;
+  pointer-events:none;
+}
+
+.speed-wave{
+  position:absolute;
+  left:50%;
+  top:368px;
+  transform:translateX(-50%);
+  width:250px;
+  height:26px;
+  overflow:visible;
+}
+
+.speed-wave .trail{
+  fill:none;
+  stroke:rgba(32,40,80,.55);
+  stroke-width:4.5;
+  stroke-linecap:round;
+}
+
+.speed-wave .main{
+  fill:none;
+  stroke:#34ecff;
+  stroke-width:4.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 8px rgba(37,229,229,.58));
+}
+
+.speedtest-controls{
+  display:flex;
+  justify-content:center;
+  margin-top:6px;
+}
+
+.speedtest-go{
+  appearance:none;
+  -webkit-appearance:none;
+  width:76px;
+  height:76px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.22);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,.06)),
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.55), transparent 28%),
+    rgba(255,255,255,.08);
+  color:#f6f8ff;
+  font-family:var(--ui-font);
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.06em;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.55),
+    inset 0 -12px 18px rgba(0,0,0,.22),
+    0 16px 30px rgba(0,0,0,.22),
+    0 0 18px rgba(255,255,255,.10);
+  backdrop-filter:blur(18px) saturate(165%);
+  -webkit-backdrop-filter:blur(18px) saturate(165%);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:.22s ease;
+}
+
+.speedtest-go::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  pointer-events:none;
+}
+
+.speedtest-go::after{
+  content:"";
+  position:absolute;
+  left:16%;
+  right:16%;
+  top:12%;
+  height:28%;
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.03));
+  pointer-events:none;
+}
+
+.speedtest-go:hover{
+  transform:translateY(-1px);
+}
+
+.speedtest-go:active{
+  transform:scale(.97);
+}
+
+.speedtest-go[disabled]{
+  opacity:.55;
+  cursor:default;
+  transform:none;
+}
+
 .footer-gif{
   margin:22px -8px -8px;
   padding:0;
@@ -682,29 +991,15 @@ button:active{
     grid-template-columns:118px minmax(0,1fr);
   }
 
-  .k,
-  .v{
+  .k,.v{
     padding:8px;
     font-size:13px;
   }
 
-  .section-title{
-    font-size:15px;
-  }
-
-  .note{
-    font-size:16px;
-    line-height:2.2;
-  }
-
-  .issue p{
-    font-size:16px;
-    line-height:2.3;
-  }
-
-  .disguise-head{
-    font-size:15px;
-  }
+  .section-title{font-size:15px}
+  .note{font-size:16px;line-height:2.2}
+  .issue p{font-size:16px;line-height:2.3}
+  .disguise-head{font-size:15px}
 
   .penalty{
     min-width:76px;
@@ -716,15 +1011,37 @@ button:active{
     gap:4px;
   }
 
-  .dns-main{
-    padding:9px 8px;
+  .dns-main{padding:9px 8px}
+  .dns-name,.dns-address,.dns-ping,.dns-type{font-size:12.5px}
+
+  .speedtest-gauge-shell{
+    width:min(100%,318px);
+    height:425px;
   }
 
-  .dns-name,
-  .dns-address,
-  .dns-ping,
-  .dns-type{
-    font-size:12.5px;
+  .speed-value-layer{
+    top:266px;
+    width:154px;
+  }
+
+  .speed-value{
+    font-size:clamp(42px,10vw,60px);
+  }
+
+  .speed-status{
+    top:340px;
+    width:210px;
+  }
+
+  .speed-wave{
+    top:358px;
+    width:238px;
+  }
+
+  .speedtest-go{
+    width:72px;
+    height:72px;
+    font-size:21px;
   }
 
   .footer-gif{
@@ -732,47 +1049,155 @@ button:active{
     border-radius:0 0 22px 22px;
   }
 
-  .footer-gif img{
-    min-height:260px;
-  }
-
-  .spaceship-fly{
-    width:90px;
-    height:90px;
-  }
+  .footer-gif img{min-height:260px}
+  .spaceship-fly{width:90px;height:90px}
 }
 
 @media(max-width:390px){
-  .banner pre{
-    font-size:5.26px;
+  .banner pre{font-size:5.26px}
+  .row{grid-template-columns:108px minmax(0,1fr)}
+  .dns-row{grid-template-columns:minmax(0,1fr) 68px 48px}
+  .dns-name,.dns-address,.dns-ping,.dns-type{font-size:12px}
+  .note{font-size:15px}
+  .issue p{font-size:15px}
+
+  .speedtest-gauge-shell{
+    width:min(100%,300px);
+    height:412px;
   }
 
-  .row{
-    grid-template-columns:108px minmax(0,1fr);
+  .speed-value-layer{
+    top:255px;
+    width:150px;
   }
 
-  .dns-row{
-    grid-template-columns:minmax(0,1fr) 68px 48px;
+  .speed-value{
+    font-size:clamp(40px,10vw,56px);
   }
 
-  .dns-name,
-  .dns-address,
-  .dns-ping,
-  .dns-type{
-    font-size:12px;
+  .speed-status{
+    top:325px;
+    width:200px;
+    font-size:5.6px;
   }
 
-  .note{
-    font-size:15px;
+  .speed-wave{
+    top:343px;
+    width:226px;
   }
 
-  .issue p{
-    font-size:15px;
+  .speedtest-go{
+    width:68px;
+    height:68px;
+    font-size:20px;
   }
 
-  .spaceship-fly{
-    width:82px;
-    height:82px;
+  .spaceship-fly{width:82px;height:82px}
+}
+
+/* MOBILE SCROLL PERFORMANCE FIX - NO DESIGN CHANGE */
+@media(max-width:560px){
+  html,
+  body{
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:none;
+  }
+
+  body{
+    background-attachment:scroll;
+  }
+
+  .wrap{
+    transform:translate3d(0,0,0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    isolation:isolate;
+  }
+
+  .banner,
+  .chrome,
+  .card,
+  .note,
+  .issue,
+  .disguise-card,
+  .speedtest-card,
+  .progress,
+  .disguise-track,
+  .speedtest-gauge-shell{
+    transform:translate3d(0,0,0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    contain:paint;
+  }
+
+  .row,
+  .dns-row,
+  .issue-top,
+  .disguise-head,
+  .speedtest-head,
+  .speed-value-layer,
+  .speed-status,
+  .speed-wave,
+  .speedtest-controls{
+    transform:translate3d(0,0,0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+
+  .footer-gif,
+  .footer-gif img{
+    transform:translate3d(0,0,0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    contain:paint;
+  }
+
+  .speedtest-svg,
+  .speed-wave,
+  svg{
+    shape-rendering:geometricPrecision;
+    text-rendering:geometricPrecision;
+  }
+
+  .speed-arc-active,
+  .speed-needle,
+  .speed-wave .main,
+  .bar,
+  .disguise-fill{
+    will-change:transform,opacity;
+  }
+}
+
+/* STRONGER MOBILE FIX - SAME DESIGN, LIGHTER GPU LOAD */
+@media(max-width:560px){
+  .wrap,
+  .banner,
+  .chrome,
+  .card,
+  .note,
+  .issue,
+  .disguise-card,
+  .speedtest-card,
+  .progress{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  .wrap{
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.052) 38%, rgba(255,255,255,.02)),
+      radial-gradient(circle at 24% 10%, rgba(255,255,255,.20), transparent 20%),
+      radial-gradient(circle at 80% 92%, rgba(255,255,255,.12), transparent 24%),
+      rgba(8,13,30,.42);
+  }
+
+  .chrome,
+  .card,
+  .note,
+  .issue,
+  .disguise-card,
+  .speedtest-card{
+    background:rgba(8,13,30,.62);
   }
 }
 </style>
@@ -804,7 +1229,7 @@ button:active{
 Apex NetScaner یک اسکنر تحت مرورگر برای بررسی وضعیت اتصال VPN است. این ابزار IP خروجی، نسخه IP، کشور، شهر، تایم‌زون، ISP، ASN، دیتاسنتر یا هاستینگ بودن IP، احتمال شناسایی‌شدن به‌عنوان VPN/Proxy، Multi-user Shared IP، مشخصات مرورگر، تأخیر اتصال، تست سبک دانلود و DNS/DoH های متناسب با IPv4 یا IPv6 را بررسی می‌کند.
 </p>
 
-<div class="section-title">VPN location🚪</div>
+<div class="section-title">VPN LOCATION</div>
 <div class="card" id="geo"></div>
 
 <div class="section-title">BROWSER PRIVACY SIGNALS</div>
@@ -813,7 +1238,7 @@ Apex NetScaner یک اسکنر تحت مرورگر برای بررسی وضعی�
 <div class="section-title">DNS / DOH LATENCY TEST</div>
 <div class="card" id="latency"></div>
 
-<div class="section-title">⬇️TINY DOWNLOAD TEST</div>
+<div class="section-title">TINY DOWNLOAD TEST</div>
 <div class="card" id="speed"></div>
 
 <div class="section-title">YOUR DISGUISE</div>
@@ -835,6 +1260,66 @@ Apex NetScaner یک اسکنر تحت مرورگر برای بررسی وضعی�
 <div class="section-title">FINAL RESULT</div>
 <div class="card" id="final"></div>
 
+<div class="section-title">SPEEDTEST</div>
+<div class="speedtest-card">
+  <div class="speedtest-head">
+    <span class="speedtest-logo" aria-hidden="true"></span>
+    <span>SPEEDTEST</span>
+  </div>
+
+  <div class="speedtest-gauge-shell">
+    <svg class="speedtest-svg" id="speedGauge" viewBox="0 0 360 420" aria-hidden="true">
+      <defs>
+        <linearGradient id="speedArcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#3be3ff"/>
+          <stop offset="55%" stop-color="#7aa0ff"/>
+          <stop offset="100%" stop-color="#c77bff"/>
+        </linearGradient>
+
+        <linearGradient id="needleGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#ffb36a" stop-opacity=".78"/>
+          <stop offset="100%" stop-color="#ff8a4b" stop-opacity="1"/>
+        </linearGradient>
+      </defs>
+
+      <path id="speedArcBg" class="speed-arc-bg"></path>
+      <path id="speedArcActive" class="speed-arc-active"></path>
+      <g id="speedTicks"></g>
+      <g id="speedLabels"></g>
+
+      <g id="speedNeedleGroup">
+        <path id="speedNeedle" class="speed-needle"></path>
+        <circle class="speed-needle-cap" id="speedNeedleCap" cx="180" cy="190" r="11"></circle>
+      </g>
+    </svg>
+
+    <div class="speed-value-layer">
+      <div class="speed-value" id="speedValue">0.00</div>
+      <div class="speed-unit">
+        <span class="down">↓</span>
+        <span>Mbps</span>
+      </div>
+      <div class="speed-ping">
+        <span>Ping</span>
+        <span class="ping-ms">ms</span>
+        <span class="ping-icon">↔</span>
+        <span class="ping-value" id="speedPingValue">--</span>
+      </div>
+    </div>
+
+    <div class="speed-status" id="speedStatus">Press GO to start manual speed test | Max 2 MB</div>
+
+    <svg class="speed-wave" viewBox="0 0 250 26" preserveAspectRatio="none" aria-hidden="true">
+      <path class="trail" d="M4 13 H246"></path>
+      <path class="main" id="speedWavePath" d="M4 13 C24 12, 38 14, 56 13 S88 12, 108 13 S136 14, 156 13 S198 12, 246 13"></path>
+    </svg>
+  </div>
+
+  <div class="speedtest-controls">
+    <button class="speedtest-go" id="speedGo" type="button">GO</button>
+  </div>
+</div>
+
 <div class="footer-gif">
   <img src="https://i.pinimg.com/originals/e2/8d/61/e28d61b0ce1b686bbd9c19b98912101f.gif" alt="APEX footer gif">
 </div>
@@ -844,8 +1329,11 @@ Apex NetScaner یک اسکنر تحت مرورگر برای بررسی وضعی�
 <script>
 const $=id=>document.getElementById(id);
 const setBar=n=>$('bar').style.width=n+'%';
+
 let dnsExpanded=false;
 let dnsLastRows=[];
+let lastBestDnsMs=null;
+let apexScanRunning=false;
 
 const esc=s=>String(s??'N/A').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
@@ -853,7 +1341,7 @@ function row(k,v,cls=''){
   return `<div class="row"><div class="k">${esc(k)}</div><div class="v ${cls}">${esc(v)}</div></div>`;
 }
 
-function card(id,title,rows){
+function card(id,rows){
   $(id).innerHTML=rows.join('');
 }
 
@@ -868,7 +1356,7 @@ function ipVersion(ip){
   return ip.includes(':') ? 'IPv6' : 'IPv4';
 }
 
-async function fetchJSON(url,timeout=9000){
+async function fetchJSON(url,timeout=7000){
   const ctrl=new AbortController();
   const t=setTimeout(()=>ctrl.abort(),timeout);
   try{
@@ -882,7 +1370,7 @@ async function fetchJSON(url,timeout=9000){
 async function getGeoData(){
   const sources=[
     async()=>{
-      const d=await fetchJSON('https://ipwho.is/?security=1');
+      const d=await fetchJSON('https://ipwho.is/?security=1',6500);
       if(!d||d.success===false||!d.ip)throw new Error();
       return{
         ip:d.ip,
@@ -899,7 +1387,7 @@ async function getGeoData(){
       };
     },
     async()=>{
-      const d=await fetchJSON('https://ipapi.co/json/');
+      const d=await fetchJSON('https://ipapi.co/json/',6500);
       if(!d||!d.ip)throw new Error();
       return{
         ip:d.ip,
@@ -939,32 +1427,89 @@ async function getGeoData(){
   };
 }
 
-async function timedFetch(label,url,timeout=9000){
+async function timedRequest(url,timeout=3200){
   const ctrl=new AbortController();
   const t=setTimeout(()=>ctrl.abort(),timeout);
   const start=performance.now();
-
   try{
     await fetch(url,{mode:'no-cors',cache:'no-store',signal:ctrl.signal});
-    return{label,ms:Math.round(performance.now()-start),ok:true};
+    return {ok:true,ms:Math.round(performance.now()-start)};
   }catch(e){
-    return{label,ms:null,ok:false};
+    return {ok:false,ms:null};
   }finally{
     clearTimeout(t);
   }
 }
 
-async function tinyDownload(){
-  const bytes=512*1024;
-  const url=`https://speed.cloudflare.com/__down?bytes=${bytes}&r=${Math.random()}`;
-  const start=performance.now();
+async function downloadSpeedBudgeted(limitBytes=2*1024*1024,onProgress=null){
+  let downloadedBytes=0;
+  let transferMs=0;
+  const samples=[];
+  let chunkBytes=256*1024;
 
+  while(downloadedBytes < limitBytes){
+    const remaining=limitBytes-downloadedBytes;
+
+    if(samples.length>=2){
+      const avg=samples.reduce((a,b)=>a+b,0)/samples.length;
+      chunkBytes = avg >= 10 ? 512*1024 : 256*1024;
+    }
+
+    const bytes=Math.min(chunkBytes,remaining);
+    const url=`https://speed.cloudflare.com/__down?bytes=${bytes}&r=${Math.random()}`;
+    const start=performance.now();
+
+    try{
+      const r=await fetch(url,{cache:'no-store'});
+      const buf=await r.arrayBuffer();
+      const ms=performance.now()-start;
+      const actualBytes=buf.byteLength || bytes;
+
+      if(ms>0 && actualBytes>0){
+        downloadedBytes+=actualBytes;
+        transferMs+=ms;
+
+        const instantMbps=(actualBytes*8)/(ms/1000)/1e6;
+        samples.push(instantMbps);
+
+        const avgMbps=(downloadedBytes*8)/(transferMs/1000)/1e6;
+
+        if(typeof onProgress==='function'){
+          onProgress({
+            mbps:avgMbps,
+            downloadedBytes,
+            limitBytes
+          });
+        }
+      }else{
+        break;
+      }
+    }catch(e){
+      break;
+    }
+  }
+
+  const finalMbps = transferMs>0
+    ? (downloadedBytes*8)/(transferMs/1000)/1e6
+    : 0;
+
+  return{
+    mbps:finalMbps,
+    usedMB:downloadedBytes/1024/1024,
+    downloadedBytes,
+    transferMs
+  };
+}
+
+async function tinyDownload(){
   try{
-    await fetch(url,{mode:'no-cors',cache:'no-store'});
-    const sec=(performance.now()-start)/1000;
-    return{mbps:((bytes*8)/sec/1e6).toFixed(2)};
+    const result=await downloadSpeedBudgeted(2*1024*1024);
+    return{
+      mbps:result.mbps.toFixed(2),
+      usedMB:result.usedMB.toFixed(2)
+    };
   }catch(e){
-    return{mbps:'FAILED'};
+    return{mbps:'FAILED',usedMB:'0.00'};
   }
 }
 
@@ -1082,96 +1627,93 @@ function pingClass(ms){
 
 function allDnsTargets(){
   return [
-    ['GOOGLE IPv4 8.8.8.8','8.8.8.8','IPv4',false],
-    ['GOOGLE IPv4 8.8.4.4','8.8.4.4','IPv4',false],
-    ['GOOGLE IPv6 2001:4860:4860::8888','2001:4860:4860::8888','IPv6',false],
-    ['GOOGLE IPv6 2001:4860:4860::8844','2001:4860:4860::8844','IPv6',false],
-    ['GOOGLE DoH','https://dns.google/dns-query','DoH',true],
-    ['GOOGLE DoU','quic://dns.google:853','DoU',false],
+    ['GOOGLE IPv4 8.8.8.8','8.8.8.8','IPv4',false,''],
+    ['GOOGLE IPv4 8.8.4.4','8.8.4.4','IPv4',false,''],
+    ['GOOGLE IPv6 2001:4860:4860::8888','2001:4860:4860::8888','IPv6',false,''],
+    ['GOOGLE IPv6 2001:4860:4860::8844','2001:4860:4860::8844','IPv6',false,''],
+    ['GOOGLE DoH','https://dns.google/dns-query','DoH',true,'https://dns.google/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['GOOGLE DoU','quic://dns.google:853','DoU',false,''],
 
-    ['CLOUDFLARE IPv4 1.1.1.1','1.1.1.1','IPv4',false],
-    ['CLOUDFLARE IPv4 1.0.0.1','1.0.0.1','IPv4',false],
-    ['CLOUDFLARE IPv6 2606:4700:4700::1111','2606:4700:4700::1111','IPv6',false],
-    ['CLOUDFLARE IPv6 2606:4700:4700::1001','2606:4700:4700::1001','IPv6',false],
-    ['CLOUDFLARE DoH','https://cloudflare-dns.com/dns-query','DoH',true],
-    ['CLOUDFLARE DoU','quic://cloudflare-dns.com:853','DoU',false],
+    ['CLOUDFLARE IPv4 1.1.1.1','1.1.1.1','IPv4',false,''],
+    ['CLOUDFLARE IPv4 1.0.0.1','1.0.0.1','IPv4',false,''],
+    ['CLOUDFLARE IPv6 2606:4700:4700::1111','2606:4700:4700::1111','IPv6',false,''],
+    ['CLOUDFLARE IPv6 2606:4700:4700::1001','2606:4700:4700::1001','IPv6',false,''],
+    ['CLOUDFLARE DoH','https://cloudflare-dns.com/dns-query','DoH',true,'https://cloudflare-dns.com/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['CLOUDFLARE DoU','quic://cloudflare-dns.com:853','DoU',false,''],
 
-    ['CLOUDFLARE FAMILY IPv4 1.1.1.2','1.1.1.2','IPv4',false],
-    ['CLOUDFLARE FAMILY IPv4 1.1.1.3','1.1.1.3','IPv4',false],
-    ['CLOUDFLARE FAMILY DoH','https://family.cloudflare-dns.com/dns-query','DoH',true],
-    ['CLOUDFLARE FAMILY DoU','quic://family.cloudflare-dns.com:853','DoU',false],
+    ['CLOUDFLARE FAMILY IPv4 1.1.1.2','1.1.1.2','IPv4',false,''],
+    ['CLOUDFLARE FAMILY IPv4 1.1.1.3','1.1.1.3','IPv4',false,''],
+    ['CLOUDFLARE FAMILY DoH','https://family.cloudflare-dns.com/dns-query','DoH',true,'https://family.cloudflare-dns.com/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['CLOUDFLARE FAMILY DoU','quic://family.cloudflare-dns.com:853','DoU',false,''],
 
-    ['QUAD9 IPv4 9.9.9.9','9.9.9.9','IPv4',false],
-    ['QUAD9 IPv4 149.112.112.112','149.112.112.112','IPv4',false],
-    ['QUAD9 IPv6 2620:fe::fe','2620:fe::fe','IPv6',false],
-    ['QUAD9 IPv6 2620:fe::9','2620:fe::9','IPv6',false],
-    ['QUAD9 DoH','https://dns.quad9.net/dns-query','DoH',true],
-    ['QUAD9 DoU','quic://dns.quad9.net:853','DoU',false],
+    ['QUAD9 IPv4 9.9.9.9','9.9.9.9','IPv4',false,''],
+    ['QUAD9 IPv4 149.112.112.112','149.112.112.112','IPv4',false,''],
+    ['QUAD9 IPv6 2620:fe::fe','2620:fe::fe','IPv6',false,''],
+    ['QUAD9 IPv6 2620:fe::9','2620:fe::9','IPv6',false,''],
+    ['QUAD9 DoH','https://dns.quad9.net/dns-query','DoH',true,'https://dns.quad9.net/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['QUAD9 DoU','quic://dns.quad9.net:853','DoU',false,''],
 
-    ['ADGUARD IPv4 94.140.14.14','94.140.14.14','IPv4',false],
-    ['ADGUARD IPv4 94.140.15.15','94.140.15.15','IPv4',false],
-    ['ADGUARD IPv6 2a10:50c0::ad1:ff','2a10:50c0::ad1:ff','IPv6',false],
-    ['ADGUARD IPv6 2a10:50c0::ad2:ff','2a10:50c0::ad2:ff','IPv6',false],
-    ['ADGUARD DoH','https://dns.adguard.com/dns-query','DoH',true],
-    ['ADGUARD DoU','quic://dns.adguard.com:853','DoU',false],
+    ['ADGUARD IPv4 94.140.14.14','94.140.14.14','IPv4',false,''],
+    ['ADGUARD IPv4 94.140.15.15','94.140.15.15','IPv4',false,''],
+    ['ADGUARD IPv6 2a10:50c0::ad1:ff','2a10:50c0::ad1:ff','IPv6',false,''],
+    ['ADGUARD IPv6 2a10:50c0::ad2:ff','2a10:50c0::ad2:ff','IPv6',false,''],
+    ['ADGUARD DoH','https://dns.adguard.com/dns-query','DoH',true,'https://dns.adguard.com/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['ADGUARD DoU','quic://dns.adguard.com:853','DoU',false,''],
 
-    ['ADGUARD FAMILY IPv4 94.140.14.15','94.140.14.15','IPv4',false],
-    ['ADGUARD FAMILY IPv4 94.140.15.16','94.140.15.16','IPv4',false],
-    ['ADGUARD FAMILY DoU','quic://family.adguard-dns.com:853','DoU',false],
+    ['ADGUARD FAMILY IPv4 94.140.14.15','94.140.14.15','IPv4',false,''],
+    ['ADGUARD FAMILY IPv4 94.140.15.16','94.140.15.16','IPv4',false,''],
+    ['ADGUARD FAMILY DoU','quic://family.adguard-dns.com:853','DoU',false,''],
 
-    ['NEXTDNS IPv4 45.90.28.0','45.90.28.0','IPv4',false],
-    ['NEXTDNS IPv4 45.90.30.0','45.90.30.0','IPv4',false],
-    ['NEXTDNS IPv6 2a07:a8c0::','2a07:a8c0::','IPv6',false],
-    ['NEXTDNS IPv6 2a07:a8c1::','2a07:a8c1::','IPv6',false],
-    ['NEXTDNS DoH','https://dns.nextdns.io/','DoH',true],
-    ['NEXTDNS DoU','quic://dns.nextdns.io:853','DoU',false],
+    ['NEXTDNS IPv4 45.90.28.0','45.90.28.0','IPv4',false,''],
+    ['NEXTDNS IPv4 45.90.30.0','45.90.30.0','IPv4',false,''],
+    ['NEXTDNS IPv6 2a07:a8c0::','2a07:a8c0::','IPv6',false,''],
+    ['NEXTDNS IPv6 2a07:a8c1::','2a07:a8c1::','IPv6',false,''],
+    ['NEXTDNS DoH','https://dns.nextdns.io/','DoH',true,'https://dns.nextdns.io/?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['NEXTDNS DoU','quic://dns.nextdns.io:853','DoU',false,''],
 
-    ['DNSPOD IPv4 119.29.29.29','119.29.29.29','IPv4',false],
-    ['DNSPOD IPv4 119.28.28.28','119.28.28.28','IPv4',false],
-    ['DNSPOD IPv6 2402:4e00::','2402:4e00::','IPv6',false],
-    ['DNSPOD DoH','https://doh.pub/dns-query','DoH',true],
-    ['DNSPOD DoU','quic://dns.pub:853','DoU',false],
+    ['DNSPOD IPv4 119.29.29.29','119.29.29.29','IPv4',false,''],
+    ['DNSPOD IPv4 119.28.28.28','119.28.28.28','IPv4',false,''],
+    ['DNSPOD IPv6 2402:4e00::','2402:4e00::','IPv6',false,''],
+    ['DNSPOD DoH','https://doh.pub/dns-query','DoH',true,'https://doh.pub/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['DNSPOD DoU','quic://dns.pub:853','DoU',false,''],
 
-    ['MULLVAD IPv4 194.242.2.2','194.242.2.2','IPv4',false],
-    ['MULLVAD IPv4 193.19.108.2','193.19.108.2','IPv4',false],
-    ['MULLVAD IPv6 2a07:e340::2','2a07:e340::2','IPv6',false],
-    ['MULLVAD IPv6 2a07:e340::3','2a07:e340::3','IPv6',false],
-    ['MULLVAD DoH','https://doh.mullvad.net/dns-query','DoH',true],
-    ['MULLVAD DoU','quic://dns.mullvad.net:853','DoU',false],
+    ['MULLVAD IPv4 194.242.2.2','194.242.2.2','IPv4',false,''],
+    ['MULLVAD IPv4 193.19.108.2','193.19.108.2','IPv4',false,''],
+    ['MULLVAD IPv6 2a07:e340::2','2a07:e340::2','IPv6',false,''],
+    ['MULLVAD IPv6 2a07:e340::3','2a07:e340::3','IPv6',false,''],
+    ['MULLVAD DoH','https://doh.mullvad.net/dns-query','DoH',true,'https://doh.mullvad.net/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['MULLVAD DoU','quic://dns.mullvad.net:853','DoU',false,''],
 
-    ['CONTROLD IPv4 76.76.2.0','76.76.2.0','IPv4',false],
-    ['CONTROLD IPv4 76.76.10.0','76.76.10.0','IPv4',false],
-    ['CONTROLD IPv6 2606:1a40::','2606:1a40::','IPv6',false],
-    ['CONTROLD IPv6 2606:1a40:1::','2606:1a40:1::','IPv6',false],
-    ['CONTROLD DoH','https://freedns.controld.com/p0','DoH',true],
-    ['CONTROLD DoU','quic://freedns.controld.com:853','DoU',false],
+    ['CONTROLD IPv4 76.76.2.0','76.76.2.0','IPv4',false,''],
+    ['CONTROLD IPv4 76.76.10.0','76.76.10.0','IPv4',false,''],
+    ['CONTROLD IPv6 2606:1a40::','2606:1a40::','IPv6',false,''],
+    ['CONTROLD IPv6 2606:1a40:1::','2606:1a40:1::','IPv6',false,''],
+    ['CONTROLD DoH','https://freedns.controld.com/p0','DoH',true,'https://freedns.controld.com/p0?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['CONTROLD DoU','quic://freedns.controld.com:853','DoU',false,''],
 
-    ['ALIDNS IPv4 223.5.5.5','223.5.5.5','IPv4',false],
-    ['ALIDNS IPv4 223.6.6.6','223.6.6.6','IPv4',false],
-    ['ALIDNS IPv6 2400:3200::1','2400:3200::1','IPv6',false],
-    ['ALIDNS IPv6 2400:3200:baba::1','2400:3200:baba::1','IPv6',false],
-    ['ALIDNS DoH','https://dns.alidns.com/dns-query','DoH',true],
-    ['ALIDNS DoU','quic://dns.alidns.com:853','DoU',false],
+    ['ALIDNS IPv4 223.5.5.5','223.5.5.5','IPv4',false,''],
+    ['ALIDNS IPv4 223.6.6.6','223.6.6.6','IPv4',false,''],
+    ['ALIDNS IPv6 2400:3200::1','2400:3200::1','IPv6',false,''],
+    ['ALIDNS IPv6 2400:3200:baba::1','2400:3200:baba::1','IPv6',false,''],
+    ['ALIDNS DoH','https://dns.alidns.com/dns-query','DoH',true,'https://dns.alidns.com/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['ALIDNS DoU','quic://dns.alidns.com:853','DoU',false,''],
 
-    ['DNS0 IPv4 193.110.81.0','193.110.81.0','IPv4',false],
-    ['DNS0 IPv4 185.253.5.0','185.253.5.0','IPv4',false],
-    ['DNS0 IPv6 2a0f:fc80::','2a0f:fc80::','IPv6',false],
-    ['DNS0 IPv6 2a0f:fc81::','2a0f:fc81::','IPv6',false],
-    ['DNS0 DoH','https://dns0.eu/dns-query','DoH',true],
-    ['DNS0 DoU','quic://dns0.eu:853','DoU',false]
+    ['DNS0 IPv4 193.110.81.0','193.110.81.0','IPv4',false,''],
+    ['DNS0 IPv4 185.253.5.0','185.253.5.0','IPv4',false,''],
+    ['DNS0 IPv6 2a0f:fc80::','2a0f:fc80::','IPv6',false,''],
+    ['DNS0 IPv6 2a0f:fc81::','2a0f:fc81::','IPv6',false,''],
+    ['DNS0 DoH','https://dns0.eu/dns-query','DoH',true,'https://dns0.eu/dns-query?dns=AAABAAABAAAAAAAAA3d3dwZnb29nbGUDY29tAAABAAE'],
+    ['DNS0 DoU','quic://dns0.eu:853','DoU',false,'']
   ];
 }
 
 async function scanDnsTargets(){
   const targets=allDnsTargets();
-
-  const results=await Promise.all(targets.map(async ([label,address,type,testable])=>{
-    if(!testable){
+  const results=await Promise.all(targets.map(async ([label,address,type,testable,testUrl])=>{
+    if(!testable || !testUrl){
       return {label,address,type,ms:null,ok:false,status:'Browser blocked'};
     }
-
-    const r=await timedFetch(label,address,9000);
-
+    const r=await timedRequest(`${testUrl}&r=${Math.random()}`,3200);
     return {
       label,
       address,
@@ -1181,7 +1723,6 @@ async function scanDnsTargets(){
       status:r.ok ? `${r.ms} ms` : 'FAILED'
     };
   }));
-
   return results;
 }
 
@@ -1206,182 +1747,404 @@ function dnsRow(r){
 
 function renderDnsRows(rows){
   dnsLastRows=rows;
-  const shown=dnsExpanded ? rows : rows.slice(0,10);
 
-  const html=[
-    row('Shown',dnsExpanded ? `All ${rows.length} DNS records` : `10 of ${rows.length} DNS records`,'sky'),
+  const actualCount = rows.filter(r=>r.type!=='INFO' && r.type!=='BEST').length;
+  const shown = dnsExpanded ? rows : rows.slice(0,10);
+
+  const html = [
+    row('Shown', dnsExpanded ? `All ${actualCount} DNS records` : `10 of ${actualCount} DNS records`,'sky'),
     ...shown.map(r=>dnsRow(r))
   ];
 
   if(rows.length>10){
-    html.push(`<button class="see-more" type="button" onclick="toggleDnsList()">${dnsExpanded ? 'See less' : 'See more'}</button>`);
+    html.push(`<div class="see-more-wrap"><button class="see-more" type="button" onclick="toggleDnsList(this)">${dnsExpanded ? 'See less' : 'See more'}</button></div>`);
   }
 
-  $('latency').innerHTML=html.join('');
+  $('latency').innerHTML = html.join('');
 }
 
 function sparkleSeeMore(btn){
   btn.querySelectorAll('.sparkle').forEach(x=>x.remove());
-
-  const points=[
-    [42,42],
-    [50,34],
-    [58,43],
-    [47,55],
-    [55,58]
-  ];
-
+  const points=[[42,42],[50,34],[58,43],[47,55],[55,58]];
   points.forEach(([x,y],i)=>{
     const s=document.createElement('span');
     s.className='sparkle';
     s.style.left=x+'%';
     s.style.top=y+'%';
-    s.style.animationDelay=(i*35)+'ms';
+    s.style.animationDelay=(i*45)+'ms';
     btn.appendChild(s);
-    setTimeout(()=>s.remove(),500);
+    setTimeout(()=>s.remove(),900);
   });
 }
 
-function toggleDnsList(){
-  const btn=document.querySelector('.see-more');
-  if(btn){
-    sparkleSeeMore(btn);
-  }
-
-  window.setTimeout(()=>{
+function toggleDnsList(btn){
+  if(btn) sparkleSeeMore(btn);
+  setTimeout(()=>{
     dnsExpanded=!dnsExpanded;
     renderDnsRows(dnsLastRows);
-  },180);
+  },160);
 }
 
 function launchSpaceship(){
   document.querySelectorAll('.spaceship-fly').forEach(x=>x.remove());
-
   const ship=document.createElement('div');
   ship.className='spaceship-fly';
   ship.innerHTML='<img src="https://files.catbox.moe/tkenq2.gif" alt="spaceship">';
   document.body.appendChild(ship);
-
-  window.setTimeout(()=>{
-    ship.remove();
-  },5200);
+  setTimeout(()=>ship.remove(),5200);
 }
 
-async function run(){
-  setBar(5);
-  updateDisguise(0);
-  dnsExpanded=false;
+async function runApexScan(){
+  if(apexScanRunning) return;
+  apexScanRunning=true;
 
-  card('geo','RUNNING',[row('Status','Checking exit IP...','cyan')]);
-  card('browser','RUNNING',[row('Status','Collecting browser signals...','cyan')]);
-  card('latency','RUNNING',[row('Status','Scanning all DNS records...','cyan')]);
-  card('speed','RUNNING',[row('Status','Waiting...','cyan')]);
-  $('issues').innerHTML='<div class="issue"><p>RUNNING</p></div>';
-  card('final','RUNNING',[row('Status','Not ready','cyan')]);
+  try{
+    setBar(5);
+    updateDisguise(0);
+    dnsExpanded=false;
 
-  const data=await getGeoData();
-  setBar(30);
+    card('geo',[row('Status','Checking exit IP...','cyan')]);
+    card('browser',[row('Status','Collecting browser signals...','cyan')]);
+    card('latency',[row('Status','Scanning all DNS records...','cyan')]);
+    card('speed',[row('Status','Waiting...','cyan')]);
+    $('issues').innerHTML='<div class="issue"><p>RUNNING</p></div>';
+    card('final',[row('Status','WAITING','muted')]);
 
-  const version=ipVersion(data.ip);
-  const asn=data.asn||'N/A';
-  const country=`${flag(data.country_code)} ${data.country||'N/A'}`;
-  const problems=detectProblems(data);
-  const disguise=Math.max(0,100-problems.reduce((s,p)=>s+p.penalty,0));
+    const data=await getGeoData();
+    setBar(30);
 
-  updateDisguise(disguise);
-  renderIssues(problems);
+    const version=ipVersion(data.ip);
+    const asn=data.asn||'N/A';
+    const country=`${flag(data.country_code)} ${data.country||'N/A'}`;
+    const problems=detectProblems(data);
+    const disguise=Math.max(0,100-problems.reduce((s,p)=>s+p.penalty,0));
 
-  card('geo','VPN location🚪',[
-    row('IP',data.ip,'sky'),
-    row('IP Version',version,version==='IPv6'?'cyan':'green'),
-    row('Country',country,'gold'),
-    row('Region',data.region,'green'),
-    row('City',data.city,'green'),
-    row('Timezone',data.timezone,'sky'),
-    row('ISP',data.isp,'yellow'),
-    row('Org',data.org,'yellow'),
-    row('ASN',asn,'orange'),
-    row('VPN/Proxy',data.vpn?'YES':'NO',data.vpn?'red':'green'),
-    row('Hosting/DC',data.hosting?'YES':'NO',data.hosting?'red':'green')
-  ]);
+    updateDisguise(disguise);
+    renderIssues(problems);
 
-  card('browser','BROWSER PRIVACY SIGNALS',[
-    row('User Agent',navigator.userAgent,'sky'),
-    row('Platform',navigator.platform||'N/A','gold'),
-    row('Language',navigator.language||'N/A','cyan'),
-    row('Languages',(navigator.languages||[]).join(', '),'sky'),
-    row('Screen',`${screen.width}x${screen.height} DPR ${devicePixelRatio}`,'gold'),
-    row('Browser TZ',Intl.DateTimeFormat().resolvedOptions().timeZone||'N/A','sky'),
-    row('CPU Threads',navigator.hardwareConcurrency||'N/A','orange')
-  ]);
+    card('geo',[
+      row('IP',data.ip,'sky'),
+      row('IP Version',version,version==='IPv6'?'cyan':'green'),
+      row('Country',country,'gold'),
+      row('Region',data.region,'green'),
+      row('City',data.city,'green'),
+      row('Timezone',data.timezone,'sky'),
+      row('ISP',data.isp,'yellow'),
+      row('Org',data.org,'yellow'),
+      row('ASN',asn,'orange'),
+      row('VPN/Proxy',data.vpn?'YES':'NO',data.vpn?'red':'green'),
+      row('Hosting/DC',data.hosting?'YES':'NO',data.hosting?'red':'green')
+    ]);
 
-  setBar(45);
+    card('browser',[
+      row('User Agent',navigator.userAgent,'sky'),
+      row('Platform',navigator.platform||'N/A','gold'),
+      row('Language',navigator.language||'N/A','cyan'),
+      row('Languages',(navigator.languages||[]).join(', '),'sky'),
+      row('Screen',`${screen.width}x${screen.height} DPR ${devicePixelRatio}`,'gold'),
+      row('Browser TZ',Intl.DateTimeFormat().resolvedOptions().timeZone||'N/A','sky'),
+      row('CPU Threads',navigator.hardwareConcurrency||'N/A','orange')
+    ]);
 
-  const dnsResults=await scanDnsTargets();
-  const best=bestDns(dnsResults);
+    setBar(45);
 
-  renderDnsRows([
-    {label:'Scan Mode',address:`All DNS records | Exit ${version}`,type:'INFO',ms:null,ok:false,status:'Complete'},
-    {label:'Fastest',address:best?`${best.label} | ${best.address}`:'N/A',type:'BEST',ms:best?.ms||null,ok:!!best,status:best?`${best.ms} ms`:'No reachable DoH'},
-    ...dnsResults
-  ]);
+    const dnsResults=await scanDnsTargets();
+    const best=bestDns(dnsResults);
+    lastBestDnsMs=best?.ms||null;
 
-  setBar(75);
+    renderDnsRows([
+      {label:'Scan Mode',address:`All DNS records | Exit ${version}`,type:'INFO',ms:null,ok:false,status:'Complete'},
+      {label:'Fastest',address:best?`${best.label} | ${best.address}`:'N/A',type:'BEST',ms:best?.ms||null,ok:!!best,status:best?`${best.ms} ms`:'No reachable DoH'},
+      ...dnsResults
+    ]);
 
-  const dl=await tinyDownload();
+    setBar(75);
 
-  card('speed','⬇️TINY DOWNLOAD TEST',[
-    row(
-      'Download',
-      dl.mbps==='FAILED' ? 'FAILED' : `${dl.mbps} Mbps`,
-      dl.mbps==='FAILED' ? 'red' : (+dl.mbps>=5 ? 'green' : (+dl.mbps>=1 ? 'gold' : 'orange'))
-    ),
-    row('Traffic Used','about 0.5 MB','orange'),
-    row('Upload','Not possible safely in static browser file','muted')
-  ]);
+    const dl=await tinyDownload();
 
-  setBar(90);
+    card('speed',[
+      row('Download',dl.mbps==='FAILED'?'FAILED':`${dl.mbps} Mbps`,dl.mbps==='FAILED'?'red':(+dl.mbps>=5?'green':+dl.mbps>=1?'gold':'orange')),
+      row('Traffic Used',dl.mbps==='FAILED'?'0 MB':`about ${dl.usedMB} MB`,'orange'),
+      row('Upload','Not possible safely in static browser file','muted')
+    ]);
 
-  const level=disguise>=75?['GOOD','green']:disguise>=50?['MEDIUM','yellow']:['WEAK','red'];
+    setBar(90);
 
-  card('final','FINAL RESULT',[
-    row('Your disguise',`${disguise}% ${level[0]}`,level[1]),
-    row('Status',disguise>=75?'Safe':'Not Safe',disguise>=75?'green':'red'),
-    row('IP Version',version,version==='IPv6'?'cyan':'green'),
-    row('Exit',`${country} / ${data.city}`,'sky'),
-    row('Fastest DNS',best?`${best.label} - ${best.ms} ms`:'N/A',best?'green':'red'),
-    row('DNS Records',`${dnsResults.length} scanned / browser-tested where possible`,'yellow'),
-    row('Problems',problems.length?`${problems.length} issue(s) detected`:'No major issue','yellow'),
-    row('DNS Leak','Browser-only page cannot test real DNS leak','muted'),
-    row('Config Nodes','Browser cannot read sing-box config','muted')
-  ]);
+    const level=disguise>=75?['GOOD','green']:disguise>=50?['MEDIUM','yellow']:['WEAK','red'];
 
-  setBar(100);
-  launchSpaceship();
+    card('final',[
+      row('Your disguise',`${disguise}% ${level[0]}`,level[1]),
+      row('Status',disguise>=75?'Safe':'Not Safe',disguise>=75?'green':'red'),
+      row('IP Version',version,version==='IPv6'?'cyan':'green'),
+      row('Exit',`${country} / ${data.city}`,'sky'),
+      row('Fastest DNS',best?`${best.label} - ${best.ms} ms`:'N/A',best?'green':'red'),
+      row('DNS Records',`${dnsResults.length} scanned / browser-tested where possible`,'yellow'),
+      row('Problems',problems.length?`${problems.length} issue(s) detected`:'No major issue','yellow'),
+      row('DNS Leak','Browser-only page cannot test real DNS leak','muted'),
+      row('Config Nodes','Browser cannot read sing-box config','muted')
+    ]);
+
+    setBar(100);
+    launchSpaceship();
+  }catch(err){
+    console.error(err);
+    card('final',[row('Error',String(err.message||err),'red')]);
+  }finally{
+    apexScanRunning=false;
+  }
+}
+
+/* SPEEDTEST */
+const speedState={
+  max:20,
+  running:false,
+  dataLimitBytes:2*1024*1024,
+  chunkBytes:256*1024,
+  current:0,
+  display:0,
+  final:0,
+  ping:null,
+  loop:null,
+  arcLength:0,
+  downloadedBytes:0,
+  transferMs:0
+};
+
+const gaugeCfg={
+  cx:180,
+  cy:190,
+  radius:135,
+  startAngle:140,
+  span:260
+};
+
+function clamp(n,min,max){
+  return Math.min(max,Math.max(min,n));
+}
+
+function polar(cx,cy,r,deg){
+  const rad=deg*Math.PI/180;
+  return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)};
+}
+
+function describeArc(cx,cy,r,startDeg,endDeg){
+  const start=polar(cx,cy,r,startDeg);
+  const end=polar(cx,cy,r,endDeg);
+  const largeArc=(endDeg-startDeg)<=180?0:1;
+  return `M ${start.x.toFixed(3)} ${start.y.toFixed(3)} A ${r} ${r} 0 ${largeArc} 1 ${end.x.toFixed(3)} ${end.y.toFixed(3)}`;
+}
+
+function speedValueToAngle(value){
+  const ratio=clamp(value/speedState.max,0,1);
+  return gaugeCfg.startAngle + (gaugeCfg.span * ratio);
+}
+
+function buildSpeedGauge(){
+  const bg=$('speedArcBg');
+  const active=$('speedArcActive');
+  const ticks=$('speedTicks');
+  const labels=$('speedLabels');
+  const needle=$('speedNeedle');
+  const cap=$('speedNeedleCap');
+
+  const arcPath=describeArc(gaugeCfg.cx,gaugeCfg.cy,gaugeCfg.radius,gaugeCfg.startAngle,gaugeCfg.startAngle+gaugeCfg.span);
+  bg.setAttribute('d',arcPath);
+  active.setAttribute('d',arcPath);
+
+  speedState.arcLength=active.getTotalLength();
+  active.style.strokeDasharray=`${speedState.arcLength}`;
+  active.style.strokeDashoffset=`${speedState.arcLength}`;
+
+  ticks.innerHTML='';
+  labels.innerHTML='';
+
+  needle.setAttribute(
+    'd',
+    `M ${gaugeCfg.cx-6} ${gaugeCfg.cy} L ${gaugeCfg.cx} ${gaugeCfg.cy-122} L ${gaugeCfg.cx+6} ${gaugeCfg.cy} Z`
+  );
+  cap.setAttribute('cx',gaugeCfg.cx);
+  cap.setAttribute('cy',gaugeCfg.cy);
+
+  for(let i=0;i<=speedState.max;i++){
+    const angle=speedValueToAngle(i);
+    const major=i%5===0;
+
+    const outer=polar(gaugeCfg.cx,gaugeCfg.cy,gaugeCfg.radius+3,angle);
+    const inner=polar(gaugeCfg.cx,gaugeCfg.cy,gaugeCfg.radius-(major?18:9),angle);
+
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',outer.x);
+    line.setAttribute('y1',outer.y);
+    line.setAttribute('x2',inner.x);
+    line.setAttribute('y2',inner.y);
+    line.setAttribute('class',`speed-tick ${major?'major':''}`);
+    ticks.appendChild(line);
+
+    const labelRadius=106;
+    const pos=polar(gaugeCfg.cx,gaugeCfg.cy,labelRadius,angle);
+    const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x',pos.x);
+    text.setAttribute('y',pos.y);
+    text.setAttribute('class',`speed-label ${major?'major':'minor'}`);
+    text.textContent=i;
+    labels.appendChild(text);
+  }
+
+  updateSpeedGauge(0);
+  updateSpeedWave(0,Date.now(),false);
+}
+
+function updateSpeedGauge(value){
+  const actual=Math.max(0,value||0);
+  const gaugeValue=clamp(actual,0,speedState.max);
+  const ratio=gaugeValue/speedState.max;
+  const dashOffset=speedState.arcLength*(1-ratio);
+
+  $('speedArcActive').style.strokeDashoffset=dashOffset;
+
+  const angle=speedValueToAngle(gaugeValue);
+  $('speedNeedleGroup').setAttribute('transform',`rotate(${angle-270} ${gaugeCfg.cx} ${gaugeCfg.cy})`);
+  $('speedValue').textContent=actual.toFixed(2);
+}
+
+function updateSpeedWave(speed,time,active){
+  const base=13;
+  const amp=active ? clamp(1.3 + speed*0.18, 1.4, 5.5) : 1.4;
+  const points=[];
+
+  for(let i=0;i<=8;i++){
+    const x=4 + ((242/8)*i);
+    const p=(time/560)+(i*0.62);
+    const y=base + Math.sin(p)*amp*0.9 + Math.cos(p*0.55)*amp*0.22;
+    points.push([x,y]);
+  }
+
+  let d=`M ${points[0][0].toFixed(2)} ${points[0][1].toFixed(2)}`;
+  for(let i=1;i<points.length;i++){
+    const prev=points[i-1];
+    const curr=points[i];
+    const cx=(prev[0]+curr[0])/2;
+    const cy=(prev[1]+curr[1])/2;
+    d+=` Q ${prev[0].toFixed(2)} ${prev[1].toFixed(2)} ${cx.toFixed(2)} ${cy.toFixed(2)}`;
+    if(i===points.length-1){
+      d+=` T ${curr[0].toFixed(2)} ${curr[1].toFixed(2)}`;
+    }
+  }
+
+  $('speedWavePath').setAttribute('d',d);
+}
+
+function setSpeedPing(ms){
+  $('speedPingValue').textContent=ms && Number.isFinite(ms) ? Math.round(ms) : '--';
+}
+
+function setSpeedStatus(text){
+  $('speedStatus').textContent=text;
+}
+
+function formatUsedMB(bytes){
+  return (bytes/1024/1024).toFixed(2);
+}
+
+async function measureSpeedPingFromBudget(){
+  if(lastBestDnsMs){
+    return {ms:lastBestDnsMs};
+  }
+
+  const start=performance.now();
+
+  try{
+    await fetch(`https://speed.cloudflare.com/__down?bytes=4096&r=${Math.random()}`,{cache:'no-store'});
+    return {ms:clamp(Math.round(performance.now()-start),10,999)};
+  }catch(e){
+    return {ms:null};
+  }
+}
+
+function resetSpeedTestVisual(){
+  speedState.current=0;
+  speedState.display=0;
+  speedState.final=0;
+  speedState.downloadedBytes=0;
+  speedState.transferMs=0;
+  updateSpeedGauge(0);
+  updateSpeedWave(0,Date.now(),false);
+  setSpeedPing(speedState.ping||null);
+  setSpeedStatus('Press GO to start manual speed test | Max 2 MB');
+  $('speedGo').disabled=false;
+  $('speedGo').textContent='GO';
+}
+
+async function startSpeedTest(){
+  if(speedState.running) return;
+
+  speedState.running=true;
+  speedState.current=0;
+  speedState.display=0;
+  speedState.final=0;
+  speedState.downloadedBytes=0;
+  speedState.transferMs=0;
+
+  const go=$('speedGo');
+  go.disabled=true;
+  go.textContent='GO';
+
+  if(speedState.loop) clearInterval(speedState.loop);
+
+  speedState.loop=setInterval(()=>{
+    speedState.display += (speedState.current - speedState.display) * 0.16;
+    updateSpeedGauge(speedState.display);
+    updateSpeedWave(speedState.display,Date.now(),true);
+    setSpeedStatus(`Testing... ${formatUsedMB(speedState.downloadedBytes)} / 2.00 MB`);
+  },60);
+
+  const pingResult=await measureSpeedPingFromBudget();
+  speedState.ping=pingResult.ms;
+  setSpeedPing(speedState.ping);
+
+  const result=await downloadSpeedBudgeted(2*1024*1024,progress=>{
+    speedState.downloadedBytes=progress.downloadedBytes;
+    speedState.current=progress.mbps;
+  });
+
+  speedState.downloadedBytes=result.downloadedBytes;
+  speedState.transferMs=result.transferMs;
+  speedState.final=Math.max(0,result.mbps||0);
+  speedState.display=speedState.final;
+
+  clearInterval(speedState.loop);
+  speedState.loop=null;
+
+  updateSpeedGauge(speedState.final);
+  updateSpeedWave(clamp(speedState.final,0,speedState.max),Date.now(),false);
+
+  setSpeedStatus(`Complete | Used ${formatUsedMB(speedState.downloadedBytes)} MB`);
+
+  go.disabled=false;
+  go.textContent='GO';
+  speedState.running=false;
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
-  const runBtn=document.getElementById('run');
+  buildSpeedGauge();
+  resetSpeedTestVisual();
 
-  if(runBtn){
-    runBtn.addEventListener('click',()=>{
-      run().catch(err=>{
-        console.error(err);
-        const final=document.getElementById('final');
-        if(final){
-          final.innerHTML='<div class="row"><div class="k">Error</div><div class="v red">'+String(err.message||err)+'</div></div>';
-        }
-      });
-    });
-  }
-
-  run().catch(err=>{
-    console.error(err);
-    const final=document.getElementById('final');
-    if(final){
-      final.innerHTML='<div class="row"><div class="k">Error</div><div class="v red">'+String(err.message||err)+'</div></div>';
-    }
+  $('run').addEventListener('click',()=>{
+    runApexScan().catch(console.error);
   });
+
+  $('speedGo').addEventListener('click',()=>{
+    startSpeedTest().catch(err=>{
+      console.error(err);
+      speedState.running=false;
+      if(speedState.loop) clearInterval(speedState.loop);
+      setSpeedStatus('Speed test failed');
+      $('speedGo').disabled=false;
+      $('speedGo').textContent='GO';
+    });
+  });
+
+  runApexScan().catch(console.error);
 });
 </script>
 </body>
