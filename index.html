@@ -31,7 +31,7 @@
 
   --fa-font:"Noto Nastaliq Urdu", serif;
   --ui-font:"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono-font:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --mono-font:ui-monospace,SFMono-Regular,Menlo,Consolas,"Courier New",monospace;
 }
 
 *{box-sizing:border-box}
@@ -41,6 +41,8 @@ html,body{
   width:100%;
   min-height:100%;
   overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
 }
 
 body{
@@ -94,6 +96,7 @@ body{
 
 .banner pre{
   margin:0;
+  display:block;
   width:100%;
   max-width:100%;
   min-width:0;
@@ -103,7 +106,13 @@ body{
   line-height:1.03;
   font-weight:900;
   white-space:pre;
-  transform-origin:center top;
+  transform-origin:left top;
+  letter-spacing:0;
+  font-variant-ligatures:none;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeSpeed;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
 }
 
 .chrome,
@@ -1133,7 +1142,7 @@ button:not(.speedtest-go):not(.see-more):active{
 <body>
 <div class="wrap">
 
-<div class="banner"><pre>─────────────────────────────────────────────────────────────────
+<div class="banner"><pre id="bannerArt">─────────────────────────────────────────────────────────────────
 ─██████████████─██████████████─██████████████─████████──████████─
 ─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒██──██▒▒▒▒██─
 ─██▒▒██████▒▒██─██▒▒██████▒▒██─██▒▒██████████─████▒▒██──██▒▒████─
@@ -1158,8 +1167,6 @@ Apex NetScanner یک اسکنر تحت مرورگر برای بررسی وضعی
   VPN/Proxy، Multi-user Shared IP،
   مشخصات مرورگر، تأخیر اتصال، تست سبک دانلود و DNS/DoH های متناسب با IPv4 یا IPv6 را بررسی می‌کند.
 </p>
-
-
 
 <div class="section-title">VPN LOCATION</div>
 <div class="card" id="geo"></div>
@@ -1286,6 +1293,30 @@ function flag(cc){
 function ipVersion(ip){
   if(!ip || ip === 'N/A') return 'Unknown';
   return ip.includes(':') ? 'IPv6' : 'IPv4';
+}
+
+function fitBannerArt(){
+  const banner=document.querySelector('.banner');
+  const art=$('bannerArt');
+  if(!banner || !art) return;
+
+  art.style.fontSize='';
+  const available=Math.max(0,banner.clientWidth-2);
+  const base=parseFloat(getComputedStyle(art).fontSize)||6;
+  const needed=art.scrollWidth||0;
+
+  if(available>0 && needed>available){
+    const fitted=Math.max(4, base*(available/needed));
+    art.style.fontSize=fitted.toFixed(2)+'px';
+  }
+}
+
+function scheduleBannerFit(){
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      fitBannerArt();
+    });
+  });
 }
 
 async function fetchJSON(url,timeout=7000){
@@ -2060,6 +2091,15 @@ async function startSpeedTest(){
 window.addEventListener('DOMContentLoaded',()=>{
   buildSpeedGauge();
   resetSpeedTestVisual();
+  scheduleBannerFit();
+
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(scheduleBannerFit).catch(scheduleBannerFit);
+  }
+
+  window.addEventListener('resize',scheduleBannerFit,{passive:true});
+  window.addEventListener('orientationchange',scheduleBannerFit);
+  window.addEventListener('load',scheduleBannerFit);
 
   $('run').addEventListener('click',()=>{
     runApexScan().catch(console.error);
