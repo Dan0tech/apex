@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>APEX🛸NetScan</title>
-
+  
 <link rel="icon" type="image/png" href="https://files.catbox.moe/6mdz1j.jpg">
 <link rel="apple-touch-icon" href="https://files.catbox.moe/6mdz1j.jpg">
 <meta name="theme-color" content="#050711">
@@ -1095,79 +1095,6 @@ button:not(.speedtest-go):not(.see-more):active{
   .spaceship-fly{width:82px;height:82px}
 }
 
-/* MOBILE SCROLL PERFORMANCE FIX - NO DESIGN CHANGE */
-@media(max-width:560px){
-  html,
-  body{
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior-y:none;
-  }
-
-  body{
-    background-attachment:scroll;
-  }
-
-  .wrap{
-    transform:translate3d(0,0,0);
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-    isolation:isolate;
-  }
-
-  .banner,
-  .chrome,
-  .card,
-  .note,
-  .issue,
-  .disguise-card,
-  .speedtest-card,
-  .progress,
-  .disguise-track,
-  .speedtest-gauge-shell{
-    transform:translate3d(0,0,0);
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-    contain:paint;
-  }
-
-  .row,
-  .dns-row,
-  .issue-top,
-  .disguise-head,
-  .speedtest-head,
-  .speed-value-layer,
-  .speed-status,
-  .speed-wave,
-  .speedtest-controls{
-    transform:translate3d(0,0,0);
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-  }
-
-  .footer-gif,
-  .footer-gif img{
-    transform:translate3d(0,0,0);
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-    contain:paint;
-  }
-
-  .speedtest-svg,
-  .speed-wave,
-  svg{
-    shape-rendering:geometricPrecision;
-    text-rendering:geometricPrecision;
-  }
-
-  .speed-arc-active,
-  .speed-needle,
-  .speed-wave .main,
-  .bar,
-  .disguise-fill{
-    will-change:transform,opacity;
-  }
-}
-
 /* STRONGER MOBILE FIX - SAME DESIGN, LIGHTER GPU LOAD */
 @media(max-width:560px){
   .wrap,
@@ -1231,6 +1158,8 @@ Apex NetScanner یک اسکنر تحت مرورگر برای بررسی وضعی
   VPN/Proxy، Multi-user Shared IP،
   مشخصات مرورگر، تأخیر اتصال، تست سبک دانلود و DNS/DoH های متناسب با IPv4 یا IPv6 را بررسی می‌کند.
 </p>
+
+
 
 <div class="section-title">VPN LOCATION</div>
 <div class="card" id="geo"></div>
