@@ -1,32 +1,1388 @@
-/* STRONGER MOBILE FIX - SAME DESIGN, LIGHTER GPU LOAD */
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>APEX NetScaner</title>
+
+<link rel="icon" type="image/png" href="https://files.catbox.moe/6mdz1j.jpg">
+<link rel="apple-touch-icon" href="https://files.catbox.moe/6mdz1j.jpg">
+<meta name="theme-color" content="#050711">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050711;
+  --line:rgba(190,200,255,.24);
+  --lav:#746f9f;
+  --lav2:#efe6ff;
+  --title:#d7c1ff;
+  --cyan:#25e5e5;
+  --purple:#b889ff;
+  --green:#49e06f;
+  --yellow:#f0d45b;
+  --red:#ff5e75;
+  --orange:#ff8a4b;
+  --muted:#a9b0d0;
+  --page-width:736px;
+  --fa-font:"Noto Nastaliq Urdu", serif;
+  --ui-font:"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono-font:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  overflow-x:hidden;
+}
+
+body{
+  color:#eef1ff;
+  font-family:var(--ui-font);
+  background:
+    radial-gradient(circle at 18% 8%, rgba(140,150,210,.35), transparent 28%),
+    radial-gradient(circle at 82% 20%, rgba(60,90,160,.35), transparent 30%),
+    linear-gradient(145deg,#050711,#0b1020 48%,#151a2f);
+}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  width:min(100% - 12px,var(--page-width));
+  margin:6px auto;
+  padding:8px;
+  border-radius:30px;
+  overflow:hidden;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.055) 38%, rgba(255,255,255,.02)),
+    radial-gradient(circle at 24% 10%, rgba(255,255,255,.24), transparent 20%),
+    radial-gradient(circle at 80% 92%, rgba(255,255,255,.14), transparent 24%),
+    rgba(8,13,30,.36);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.48),
+    inset 0 -20px 44px rgba(0,0,0,.24),
+    0 20px 70px rgba(0,0,0,.42);
+  backdrop-filter:blur(18px) saturate(145%);
+  -webkit-backdrop-filter:blur(18px) saturate(145%);
+}
+
+.banner{
+  width:100%;
+  background:rgba(116,111,159,.74);
+  color:var(--lav2);
+  padding:10px 6px;
+  border-radius:20px;
+  overflow:hidden;
+  direction:ltr;
+  text-align:left;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.45),
+    inset 0 -16px 28px rgba(40,35,90,.36),
+    0 16px 45px rgba(0,0,0,.42);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.banner pre{
+  margin:0;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow:hidden;
+  font-family:var(--mono-font);
+  font-size:clamp(5px,1.36vw,14px);
+  line-height:1.03;
+  font-weight:900;
+  white-space:pre;
+  transform-origin:center top;
+}
+
+.chrome,
+.card,
+.note,
+.issue,
+.disguise-card{
+  background:rgba(8,13,30,.52);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -12px 24px rgba(0,0,0,.26),
+    0 12px 35px rgba(0,0,0,.30);
+  backdrop-filter:blur(16px) saturate(150%);
+  -webkit-backdrop-filter:blur(16px) saturate(150%);
+}
+
+.chrome{
+  padding:12px 16px;
+  margin:12px 0;
+  direction:ltr;
+  overflow:hidden;
+  white-space:nowrap;
+  font-family:var(--ui-font);
+  font-weight:500;
+}
+
+.dots{color:#ff5e75}
+.dots b:nth-child(2){color:#f0d45b}
+.dots b:nth-child(3){color:#49e06f}
+
+button{
+  width:100%;
+  border:1px solid rgba(255,255,255,.42);
+  color:white;
+  font-family:var(--ui-font);
+  font-weight:900;
+  letter-spacing:.1px;
+  border-radius:22px;
+  padding:18px 22px;
+  font-size:17px;
+  margin:12px 0;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,.42),
+    0 0 10px rgba(255,255,255,.18);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,.82), transparent 12%),
+    radial-gradient(circle at 78% 85%, rgba(255,255,255,.24), transparent 24%),
+    linear-gradient(145deg, rgba(198,182,255,.98), rgba(116,111,159,.90) 48%, rgba(58,50,110,.96));
+  box-shadow:
+    inset 0 2px 3px rgba(255,255,255,.72),
+    inset 0 -16px 30px rgba(35,25,75,.58),
+    inset 16px 0 34px rgba(255,255,255,.10),
+    0 18px 46px rgba(96,83,170,.55);
+  backdrop-filter:blur(26px) saturate(190%);
+  -webkit-backdrop-filter:blur(26px) saturate(190%);
+  position:relative;
+  overflow:hidden;
+}
+
+button::before{
+  content:"";
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:8px;
+  height:38%;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.07));
+  pointer-events:none;
+}
+
+button::after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.16);
+  pointer-events:none;
+}
+
+button:active{
+  transform:scale(.985);
+  filter:brightness(.94);
+}
+
+.progress{
+  height:18px;
+  padding:3px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.20),rgba(255,255,255,.04)),
+    rgba(18,24,50,.68);
+  border-radius:999px;
+  overflow:visible;
+  border:1px solid rgba(125,240,255,.40);
+  box-shadow:
+    0 0 8px rgba(125,240,255,.45),
+    0 0 18px rgba(184,137,255,.35),
+    0 0 34px rgba(125,240,255,.18),
+    inset 0 1px 2px rgba(255,255,255,.45),
+    inset 0 -8px 16px rgba(0,0,0,.35);
+  backdrop-filter:blur(18px) saturate(160%);
+  -webkit-backdrop-filter:blur(18px) saturate(160%);
+  position:relative;
+}
+
+.progress::before{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border-radius:999px;
+  border:1px solid rgba(125,240,255,.22);
+  box-shadow:
+    0 0 10px rgba(125,240,255,.38),
+    0 0 28px rgba(184,137,255,.24);
+  pointer-events:none;
+}
+
+.bar{
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:
+    radial-gradient(circle at 18% 25%, rgba(255,255,255,.78), transparent 13%),
+    linear-gradient(90deg,#b889ff 0%,#7b7dff 48%,#25e5e5 100%);
+  box-shadow:
+    0 0 8px rgba(37,229,229,.85),
+    0 0 18px rgba(184,137,255,.65),
+    0 0 34px rgba(37,229,229,.38),
+    inset 0 1px 2px rgba(255,255,255,.62),
+    inset 0 -5px 12px rgba(50,20,120,.38);
+  transition:.25s;
+  position:relative;
+}
+
+.bar::after{
+  content:"";
+  position:absolute;
+  left:4%;
+  right:4%;
+  top:2px;
+  height:38%;
+  border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.04));
+}
+
+.note{
+  color:var(--muted);
+  font-family:var(--fa-font);
+  font-size:17px;
+  margin:14px 0 20px;
+  padding:14px;
+  text-align:right;
+  line-height:2.25;
+}
+
+.section-title{
+  position:relative;
+  z-index:3;
+  width:max-content;
+  max-width:92%;
+  margin:26px auto -12px;
+  padding:0 16px;
+  color:#9b8bc7;
+  font-weight:950;
+  font-size:16px;
+  text-align:center;
+  background:linear-gradient(90deg,rgba(8,13,30,.02),rgba(8,13,30,.96) 18%,rgba(8,13,30,.96) 82%,rgba(8,13,30,.02));
+  text-shadow:
+    0 0 10px rgba(155,139,199,.36),
+    0 2px 6px rgba(0,0,0,.55);
+  direction:ltr;
+}
+
+.card{
+  overflow:hidden;
+  margin:10px 0 20px;
+  padding-top:18px;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:170px minmax(0,1fr);
+  border-bottom:1px dotted rgba(150,160,220,.18);
+  min-height:36px;
+}
+
+.row:last-child{border-bottom:0}
+
+.k{
+  padding:9px 11px;
+  color:white;
+  font-family:var(--ui-font);
+  font-weight:800;
+  border-left:1px dotted rgba(150,160,220,.20);
+}
+
+.v{
+  padding:9px 11px;
+  direction:ltr;
+  text-align:left;
+  overflow-wrap:anywhere;
+  min-width:0;
+  font-family:var(--ui-font);
+  font-weight:500;
+}
+
+.green{color:var(--green)}
+.yellow{color:var(--yellow)}
+.red{color:var(--red)}
+.cyan{color:var(--cyan)}
+.orange{color:#ff8a4b}
+.gold{
+  color:#d4af37;
+  text-shadow:0 0 6px rgba(212,175,55,.35);
+}
+.muted{color:var(--muted)}
+.sky{color:#8fd8ff}
+
+.dns-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 88px 64px;
+  align-items:center;
+  gap:8px;
+  min-height:58px;
+  border-bottom:1px dotted rgba(150,160,220,.18);
+  direction:ltr;
+  width:100%;
+  max-width:100%;
+}
+
+.dns-row:last-child{border-bottom:0}
+
+.dns-main{
+  padding:10px 12px;
+  min-width:0;
+  overflow:hidden;
+}
+
+.dns-name{
+  color:#d6dcff;
+  font-family:var(--ui-font);
+  font-weight:700;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+
+.dns-address{
+  color:#a9b0d0;
+  font-family:var(--ui-font);
+  font-weight:500;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+
+.dns-ping{
+  text-align:center;
+  font-family:var(--ui-font);
+  font-weight:800;
+  color:var(--green);
+  white-space:nowrap;
+  padding:8px 4px;
+}
+
+.dns-ping.mid{color:var(--yellow)}
+.dns-ping.bad{color:var(--red)}
+
+.dns-warning{
+  display:inline-grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  margin:auto;
+  color:#ff4b4b;
+  font-size:28px;
+  line-height:1;
+  filter:
+    drop-shadow(0 0 5px rgba(255,65,65,.75))
+    drop-shadow(0 0 12px rgba(255,65,65,.35));
+}
+
+.dns-type{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#ffffff;
+  font-family:var(--ui-font);
+  font-weight:800;
+  border-left:1px dotted rgba(150,160,220,.20);
+}
+
+.dns-info .dns-name,
+.dns-best .dns-name{color:var(--yellow)}
+.dns-best .dns-ping{color:var(--green)}
+
+.see-more{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:rgba(200,205,225,.72);
+  font-family:var(--ui-font);
+  font-size:13px;
+  font-weight:700;
+  padding:12px;
+  margin:0;
+  text-align:center;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  border-radius:0;
+  cursor:pointer;
+  text-shadow:none;
+  position:relative;
+  overflow:visible;
+}
+
+.see-more::before,
+.see-more::after{display:none}
+
+.see-more:active{
+  transform:none;
+  filter:none;
+}
+
+.see-more .sparkle{
+  position:absolute;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#efe6ff;
+  pointer-events:none;
+  opacity:0;
+  box-shadow:
+    0 0 6px rgba(239,230,255,.95),
+    0 0 12px rgba(37,229,229,.65),
+    0 0 20px rgba(184,137,255,.45);
+  animation:sparklePop .7s ease-out forwards;
+}
+
+.see-more .sparkle::before,
+.see-more .sparkle::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  background:
+    linear-gradient(90deg,transparent 44%,rgba(255,255,255,.95) 48%,rgba(255,255,255,.95) 52%,transparent 56%),
+    linear-gradient(0deg,transparent 44%,rgba(255,255,255,.95) 48%,rgba(255,255,255,.95) 52%,transparent 56%);
+  filter:blur(.2px);
+}
+
+@keyframes sparklePop{
+  0%{opacity:0;transform:scale(.2) rotate(0deg)}
+  25%{opacity:1;transform:scale(1.15) rotate(25deg)}
+  100%{opacity:0;transform:scale(.15) rotate(90deg) translateY(-10px)}
+}
+
+.disguise-card{
+  margin:10px 0 20px;
+  padding:24px 16px 16px;
+}
+
+.disguise-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  direction:ltr;
+  margin-bottom:12px;
+  font-size:18px;
+  font-family:var(--ui-font);
+  font-weight:800;
+  gap:12px;
+}
+
+.disguise-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.shield{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:linear-gradient(145deg,#2ef0ff,#6cff7d);
+  color:#08121b;
+  box-shadow:0 0 18px rgba(83,255,150,.65);
+  transition:.3s;
+}
+
+.shield.unsafe{
+  background:linear-gradient(145deg,#ff7a4d,#ff3865);
+  color:white;
+  box-shadow:
+    0 0 12px rgba(255,72,96,.85),
+    0 0 28px rgba(255,72,96,.45);
+}
+
+.safe-text{
+  font-weight:900;
+  text-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+
+.disguise-track{
+  height:34px;
+  border-radius:999px;
+  padding:4px;
+  border:1px solid rgba(255,255,255,.24);
+  background:rgba(18,24,50,.72);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.35),
+    inset 0 -10px 18px rgba(0,0,0,.35),
+    0 0 24px rgba(127,120,255,.22);
+  overflow:hidden;
+}
+
+.disguise-fill{
+  height:100%;
+  width:0;
+  border-radius:999px;
+  background:linear-gradient(90deg,#b889ff,#25e5e5);
+  box-shadow:
+    0 0 10px rgba(37,229,229,.85),
+    0 0 26px rgba(184,137,255,.45),
+    inset 0 1px 2px rgba(255,255,255,.70);
+  transition:.45s;
+}
+
+.disguise-fill.warn{
+  background:
+    radial-gradient(circle at 18% 25%, rgba(255,255,255,.72), transparent 13%),
+    linear-gradient(90deg,#ff8a4b 0%,#ff6a3d 38%,#b889ff 100%);
+  box-shadow:
+    0 0 10px rgba(255,138,75,.88),
+    0 0 24px rgba(184,137,255,.52),
+    0 0 34px rgba(255,106,61,.28),
+    inset 0 1px 2px rgba(255,255,255,.70),
+    inset 0 -5px 12px rgba(90,20,0,.32);
+}
+
+.issue{
+  margin:12px 0 20px;
+  padding:14px;
+  border-color:rgba(255,94,117,.38);
+}
+
+.issue-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  direction:ltr;
+  margin-bottom:8px;
+}
+
+.penalty{
+  min-width:86px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  background:linear-gradient(145deg,#ff7a4d,#ff3865);
+  color:white;
+  font-family:var(--ui-font);
+  font-weight:800;
+  border-radius:12px;
+  padding:10px 12px;
+  box-shadow:
+    0 0 10px rgba(255,72,96,.78),
+    0 0 24px rgba(255,72,96,.42),
+    inset 0 1px 2px rgba(255,255,255,.35),
+    inset 0 -6px 12px rgba(100,0,30,.25);
+  border:1px solid rgba(255,255,255,.25);
+}
+
+.penalty-icon{
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.25));
+}
+
+.issue-title{
+  font-family:var(--ui-font);
+  font-weight:800;
+  color:white;
+  font-size:16px;
+}
+
+.issue p{
+  margin:8px 0 0;
+  color:#d6dcff;
+  font-family:var(--fa-font);
+  font-size:17px;
+  line-height:2.35;
+  text-align:right;
+}
+
+.footer-gif{
+  margin:22px -8px -8px;
+  padding:0;
+  overflow:hidden;
+  border:0;
+  border-radius:0 0 24px 24px;
+  background:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+
+.footer-gif img{
+  display:block;
+  width:100%;
+  height:auto;
+  min-height:260px;
+  object-fit:cover;
+  object-position:center;
+  border:0;
+  margin:0;
+  padding:0;
+}
+
+.spaceship-fly{
+  position:fixed;
+  width:120px;
+  height:120px;
+  left:-150px;
+  top:60vh;
+  z-index:9999;
+  pointer-events:none;
+  opacity:0;
+  transform-origin:center center;
+  filter:
+    drop-shadow(0 0 10px rgba(37,229,229,.85))
+    drop-shadow(0 0 24px rgba(184,137,255,.70))
+    drop-shadow(0 0 42px rgba(255,255,255,.18));
+  animation:spaceshipNaturalFlight 5s cubic-bezier(.18,.72,.28,1) forwards;
+}
+
+.spaceship-fly img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+@keyframes spaceshipNaturalFlight{
+  0%{opacity:0;left:-150px;top:72vh;transform:scale(.55) rotate(-18deg)}
+  8%{opacity:1;left:6vw;top:58vh;transform:scale(.85) rotate(32deg)}
+  20%{left:24vw;top:24vh;transform:scale(1.05) rotate(165deg)}
+  36%{left:48vw;top:14vh;transform:scale(.96) rotate(335deg)}
+  52%{left:65vw;top:46vh;transform:scale(1.08) rotate(540deg)}
+  68%{left:42vw;top:67vh;transform:scale(.92) rotate(720deg)}
+  82%{left:76vw;top:34vh;transform:scale(.80) rotate(930deg);opacity:1}
+  100%{left:115vw;top:8vh;transform:scale(.45) rotate(1260deg);opacity:0}
+}
+
 @media(max-width:560px){
-  .wrap,
-  .banner,
-  .chrome,
-  .card,
-  .note,
-  .issue,
-  .disguise-card,
-  .speedtest-card,
-  .progress{
-    backdrop-filter:none !important;
-    -webkit-backdrop-filter:none !important;
-  }
-
   .wrap{
-    background:
-      linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.052) 38%, rgba(255,255,255,.02)),
-      radial-gradient(circle at 24% 10%, rgba(255,255,255,.20), transparent 20%),
-      radial-gradient(circle at 80% 92%, rgba(255,255,255,.12), transparent 24%),
-      rgba(8,13,30,.42);
+    width:calc(100% - 12px);
+    margin:6px auto;
+    padding:8px;
+    border-radius:24px;
   }
 
-  .chrome,
-  .card,
-  .note,
-  .issue,
-  .disguise-card,
-  .speedtest-card{
-    background:rgba(8,13,30,.62);
+  .banner{
+    border-radius:18px;
+    padding:8px 4px;
+  }
+
+  .banner pre{
+    font-size:5.72px;
+    line-height:1.02;
+  }
+
+  .row{
+    grid-template-columns:118px minmax(0,1fr);
+  }
+
+  .k,
+  .v{
+    padding:8px;
+    font-size:13px;
+  }
+
+  .section-title{
+    font-size:15px;
+  }
+
+  .note{
+    font-size:16px;
+    line-height:2.2;
+  }
+
+  .issue p{
+    font-size:16px;
+    line-height:2.3;
+  }
+
+  .disguise-head{
+    font-size:15px;
+  }
+
+  .penalty{
+    min-width:76px;
+    padding:9px 10px;
+  }
+
+  .dns-row{
+    grid-template-columns:minmax(0,1fr) 72px 52px;
+    gap:4px;
+  }
+
+  .dns-main{
+    padding:9px 8px;
+  }
+
+  .dns-name,
+  .dns-address,
+  .dns-ping,
+  .dns-type{
+    font-size:12.5px;
+  }
+
+  .footer-gif{
+    margin:22px -8px -8px;
+    border-radius:0 0 22px 22px;
+  }
+
+  .footer-gif img{
+    min-height:260px;
+  }
+
+  .spaceship-fly{
+    width:90px;
+    height:90px;
   }
 }
+
+@media(max-width:390px){
+  .banner pre{
+    font-size:5.26px;
+  }
+
+  .row{
+    grid-template-columns:108px minmax(0,1fr);
+  }
+
+  .dns-row{
+    grid-template-columns:minmax(0,1fr) 68px 48px;
+  }
+
+  .dns-name,
+  .dns-address,
+  .dns-ping,
+  .dns-type{
+    font-size:12px;
+  }
+
+  .note{
+    font-size:15px;
+  }
+
+  .issue p{
+    font-size:15px;
+  }
+
+  .spaceship-fly{
+    width:82px;
+    height:82px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<div class="banner"><pre>─────────────────────────────────────────────────────────────────
+─██████████████─██████████████─██████████████─████████──████████─
+─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒██──██▒▒▒▒██─
+─██▒▒██████▒▒██─██▒▒██████▒▒██─██▒▒██████████─████▒▒██──██▒▒████─
+─██▒▒██──██▒▒██─██▒▒██──██▒▒██─██▒▒██───────────██▒▒▒▒██▒▒▒▒██───
+─██▒▒██████▒▒██─██▒▒██████▒▒██─██▒▒██████████───████▒▒▒▒▒▒████───
+─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒▒▒▒▒▒▒██─────██▒▒▒▒▒▒██─────
+─██▒▒██████▒▒██─██▒▒██████████─██▒▒██████████───████▒▒▒▒▒▒████───
+─██▒▒██──██▒▒██─██▒▒██─────────██▒▒██───────────██▒▒▒▒██▒▒▒▒██───
+─██▒▒██──██▒▒██─██▒▒██─────────██▒▒██████████─████▒▒██──██▒▒████─
+─██▒▒██──██▒▒██─██▒▒██─────────██▒▒▒▒▒▒▒▒▒▒██─██▒▒▒▒██──██▒▒▒▒██─
+─██████──██████─██████─────────██████████████─████████──████████─
+────────────────────────────────────────────────────────── 𝔻𝟛𝟞𝟡 ─</pre></div>
+
+<div class="chrome"><span class="dots"><b>●</b> <b>●</b> <b>●</b></span> Apex NetScaner</div>
+
+<button id="run">Start APEX Scan</button>
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<p class="note">
+Apex NetScaner یک اسکنر تحت مرورگر برای بررسی وضعیت اتصال VPN است. این ابزار IP خروجی، نسخه IP، کشور، شهر، تایم‌زون، ISP، ASN، دیتاسنتر یا هاستینگ بودن IP، احتمال شناسایی‌شدن به‌عنوان VPN/Proxy، Multi-user Shared IP، مشخصات مرورگر، تأخیر اتصال، تست سبک دانلود و DNS/DoH های متناسب با IPv4 یا IPv6 را بررسی می‌کند.
+</p>
+
+<div class="section-title">VPN location🚪</div>
+<div class="card" id="geo"></div>
+
+<div class="section-title">BROWSER PRIVACY SIGNALS</div>
+<div class="card" id="browser"></div>
+
+<div class="section-title">DNS / DOH LATENCY TEST</div>
+<div class="card" id="latency"></div>
+
+<div class="section-title">⬇️TINY DOWNLOAD TEST</div>
+<div class="card" id="speed"></div>
+
+<div class="section-title">YOUR DISGUISE</div>
+<div class="disguise-card" id="disguise">
+  <div class="disguise-head">
+    <div class="disguise-left">
+      <span class="shield">🛡️</span>
+      <span>Your disguise</span>
+      <span class="safe-text muted">WAITING</span>
+    </div>
+    <span>0%</span>
+  </div>
+  <div class="disguise-track"><div class="disguise-fill"></div></div>
+</div>
+
+<div class="section-title">DETECTED PROBLEMS</div>
+<div id="issues"><div class="issue"><p>WAITING</p></div></div>
+
+<div class="section-title">FINAL RESULT</div>
+<div class="card" id="final"></div>
+
+<div class="footer-gif">
+  <img src="https://i.pinimg.com/originals/e2/8d/61/e28d61b0ce1b686bbd9c19b98912101f.gif" alt="APEX footer gif">
+</div>
+
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const setBar=n=>$('bar').style.width=n+'%';
+let dnsExpanded=false;
+let dnsLastRows=[];
+
+const esc=s=>String(s??'N/A').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+function row(k,v,cls=''){
+  return `<div class="row"><div class="k">${esc(k)}</div><div class="v ${cls}">${esc(v)}</div></div>`;
+}
+
+function card(id,title,rows){
+  $(id).innerHTML=rows.join('');
+}
+
+function flag(cc){
+  cc=(cc||'').toUpperCase();
+  if(cc.length!==2)return'🏳️';
+  return String.fromCodePoint(...[...cc].map(c=>127397+c.charCodeAt()));
+}
+
+function ipVersion(ip){
+  if(!ip || ip === 'N/A') return 'Unknown';
+  return ip.includes(':') ? 'IPv6' : 'IPv4';
+}
+
+async function fetchJSON(url,timeout=9000){
+  const ctrl=new AbortController();
+  const t=setTimeout(()=>ctrl.abort(),timeout);
+  try{
+    const r=await fetch(url,{signal:ctrl.signal,cache:'no-store'});
+    return await r.json();
+  }finally{
+    clearTimeout(t);
+  }
+}
+
+async function getGeoData(){
+  const sources=[
+    async()=>{
+      const d=await fetchJSON('https://ipwho.is/?security=1');
+      if(!d||d.success===false||!d.ip)throw new Error();
+      return{
+        ip:d.ip,
+        country:d.country,
+        country_code:d.country_code,
+        region:d.region,
+        city:d.city,
+        timezone:d.timezone?.id||d.timezone,
+        isp:d.connection?.isp,
+        org:d.connection?.org,
+        asn:d.connection?.asn?`AS${d.connection.asn} ${d.connection.org||''}`:d.connection?.org,
+        vpn:d.security?.vpn||d.security?.proxy||d.security?.tor||false,
+        hosting:d.security?.hosting||false
+      };
+    },
+    async()=>{
+      const d=await fetchJSON('https://ipapi.co/json/');
+      if(!d||!d.ip)throw new Error();
+      return{
+        ip:d.ip,
+        country:d.country_name,
+        country_code:d.country_code,
+        region:d.region,
+        city:d.city,
+        timezone:d.timezone,
+        isp:d.org,
+        org:d.org,
+        asn:d.asn,
+        vpn:false,
+        hosting:/cloud|hosting|data|server|vps|digitalocean|amazon|google|microsoft|azure|oracle|linode|vultr|datacamp|leaseweb|hetzner|ovh|mullvad|31173/i.test(`${d.org||''} ${d.asn||''}`)
+      };
+    }
+  ];
+
+  for(const s of sources){
+    try{
+      const d=await s();
+      if(d?.ip)return d;
+    }catch(e){}
+  }
+
+  return{
+    ip:'N/A',
+    country:'N/A',
+    country_code:'',
+    region:'N/A',
+    city:'N/A',
+    timezone:'N/A',
+    isp:'N/A',
+    org:'N/A',
+    asn:'N/A',
+    vpn:false,
+    hosting:false
+  };
+}
+
+async function timedFetch(label,url,timeout=9000){
+  const ctrl=new AbortController();
+  const t=setTimeout(()=>ctrl.abort(),timeout);
+  const start=performance.now();
+
+  try{
+    await fetch(url,{mode:'no-cors',cache:'no-store',signal:ctrl.signal});
+    return{label,ms:Math.round(performance.now()-start),ok:true};
+  }catch(e){
+    return{label,ms:null,ok:false};
+  }finally{
+    clearTimeout(t);
+  }
+}
+
+async function tinyDownload(){
+  const bytes=512*1024;
+  const url=`https://speed.cloudflare.com/__down?bytes=${bytes}&r=${Math.random()}`;
+  const start=performance.now();
+
+  try{
+    await fetch(url,{mode:'no-cors',cache:'no-store'});
+    const sec=(performance.now()-start)/1000;
+    return{mbps:((bytes*8)/sec/1e6).toFixed(2)};
+  }catch(e){
+    return{mbps:'FAILED'};
+  }
+}
+
+function iconFor(title){
+  if(title.includes('Multi-user')) return '👥';
+  if(title.includes('IP type')) return '🌐';
+  if(title.includes('time')) return '⏱️';
+  if(title.includes('VPN')) return '🛡️';
+  return '⚠️';
+}
+
+function detectProblems(data){
+  const text=`${data.ip||''} ${data.isp||''} ${data.org||''} ${data.asn||''}`.toLowerCase();
+  const browserTZ=Intl.DateTimeFormat().resolvedOptions().timeZone||'';
+  const problems=[];
+
+  const datacenter=/datacamp|leaseweb|hetzner|ovh|digitalocean|amazon|aws|google|microsoft|azure|oracle|linode|vultr|mullvad|vpn|hosting|server|cloud|31173 services|31173/i.test(text);
+  const shared=/services|hosting|datacenter|data center|cloud|server|vps|vpn|proxy|31173|m247|datacamp|leaseweb|hetzner|ovh|oracle|azure|aws|amazon|google/i.test(text);
+
+  if(data.hosting || datacenter){
+    problems.push({
+      penalty:10,
+      title:'IP type danger',
+      fa:'این IP شبیه IP دیتاسنتر یا هاستینگ است. سایت‌ها معمولاً این نوع IP را طبیعی مثل اینترنت خانگی یا موبایل نمی‌بینند و ممکن است محدودیت، کپچا یا بلاک بیشتری اعمال کنند.'
+    });
+  }
+
+  if(shared){
+    problems.push({
+      penalty:20,
+      title:'Multi-user Shared IP',
+      fa:'این IP احتمالاً بین چند کاربر یا چند سرویس مشترک استفاده می‌شود. چنین IPهایی معمولاً سابقه‌ی استفاده‌ی زیاد، abuse، کپچا یا بلاک شدن دارند و باعث می‌شوند کانفیگ برای سایت‌های حساس طبیعی دیده نشود.'
+    });
+  }
+
+  if(data.vpn){
+    problems.push({
+      penalty:20,
+      title:'VPN / Proxy signal',
+      fa:'منبع GeoIP این اتصال را به‌عنوان VPN یا Proxy علامت‌گذاری کرده است. این یعنی بعضی سایت‌ها احتمالاً متوجه استفاده از VPN می‌شوند.'
+    });
+  }
+
+  if(data.timezone && browserTZ && data.timezone !== 'N/A' && browserTZ !== data.timezone){
+    problems.push({
+      penalty:10,
+      title:'System time different',
+      fa:`تایم‌زون مرورگر با تایم‌زون IP یکی نیست. تایم‌زون مرورگر: ${browserTZ}، تایم‌زون IP: ${data.timezone}. این اختلاف می‌تواند برای سایت‌های ضدتقلب علامت مشکوک باشد.`
+    });
+  }
+
+  return problems;
+}
+
+function updateDisguise(score){
+  const safe = score >= 75;
+  const status = safe ? 'Safe' : 'Not Safe';
+  const scoreCls = score>=75 ? 'green' : score>=50 ? 'yellow' : 'red';
+  const shieldCls = safe ? '' : 'unsafe';
+  const statusCls = safe ? 'green' : 'red';
+  const fillCls = score < 60 ? 'warn' : '';
+
+  $('disguise').innerHTML=`
+    <div class="disguise-head">
+      <div class="disguise-left">
+        <span class="shield ${shieldCls}">🛡️</span>
+        <span>Your disguise</span>
+        <span class="safe-text ${statusCls}">${status}</span>
+      </div>
+      <span class="${scoreCls}">${score}%</span>
+    </div>
+    <div class="disguise-track"><div class="disguise-fill ${fillCls}" style="width:${score}%"></div></div>
+  `;
+}
+
+function renderIssues(problems){
+  if(!problems.length){
+    $('issues').innerHTML=`
+      <div class="issue">
+        <div class="issue-top">
+          <div class="penalty" style="background:linear-gradient(145deg,#38e778,#1dbb65);box-shadow:0 0 12px rgba(73,224,111,.75),0 0 28px rgba(73,224,111,.35)">
+            <span class="penalty-icon">✅</span><span>0%</span>
+          </div>
+          <div class="issue-title">No major problem detected</div>
+        </div>
+        <p>مشکل مهمی از دید تست‌های مرورگری پیدا نشد. البته این به معنی ناشناس‌بودن کامل نیست، چون مرورگر نمی‌تواند DNS leak واقعی یا دیتابیس‌های اختصاصی مثل Whoer را دقیقاً بازسازی کند.</p>
+      </div>`;
+    return;
+  }
+
+  $('issues').innerHTML=problems.map(p=>`
+    <div class="issue">
+      <div class="issue-top">
+        <div class="penalty">
+          <span class="penalty-icon">${iconFor(p.title)}</span>
+          <span>-${p.penalty}%</span>
+        </div>
+        <div class="issue-title">${esc(p.title)}</div>
+      </div>
+      <p>${esc(p.fa)}</p>
+    </div>
+  `).join('');
+}
+
+function bestDns(tests){
+  return tests.filter(t=>t.ok&&typeof t.ms==='number').sort((a,b)=>a.ms-b.ms)[0]||null;
+}
+
+function pingClass(ms){
+  if(ms === null || ms === undefined) return 'bad';
+  if(ms < 500) return '';
+  if(ms < 1500) return 'mid';
+  return 'bad';
+}
+
+function allDnsTargets(){
+  return [
+    ['GOOGLE IPv4 8.8.8.8','8.8.8.8','IPv4',false],
+    ['GOOGLE IPv4 8.8.4.4','8.8.4.4','IPv4',false],
+    ['GOOGLE IPv6 2001:4860:4860::8888','2001:4860:4860::8888','IPv6',false],
+    ['GOOGLE IPv6 2001:4860:4860::8844','2001:4860:4860::8844','IPv6',false],
+    ['GOOGLE DoH','https://dns.google/dns-query','DoH',true],
+    ['GOOGLE DoU','quic://dns.google:853','DoU',false],
+
+    ['CLOUDFLARE IPv4 1.1.1.1','1.1.1.1','IPv4',false],
+    ['CLOUDFLARE IPv4 1.0.0.1','1.0.0.1','IPv4',false],
+    ['CLOUDFLARE IPv6 2606:4700:4700::1111','2606:4700:4700::1111','IPv6',false],
+    ['CLOUDFLARE IPv6 2606:4700:4700::1001','2606:4700:4700::1001','IPv6',false],
+    ['CLOUDFLARE DoH','https://cloudflare-dns.com/dns-query','DoH',true],
+    ['CLOUDFLARE DoU','quic://cloudflare-dns.com:853','DoU',false],
+
+    ['CLOUDFLARE FAMILY IPv4 1.1.1.2','1.1.1.2','IPv4',false],
+    ['CLOUDFLARE FAMILY IPv4 1.1.1.3','1.1.1.3','IPv4',false],
+    ['CLOUDFLARE FAMILY DoH','https://family.cloudflare-dns.com/dns-query','DoH',true],
+    ['CLOUDFLARE FAMILY DoU','quic://family.cloudflare-dns.com:853','DoU',false],
+
+    ['QUAD9 IPv4 9.9.9.9','9.9.9.9','IPv4',false],
+    ['QUAD9 IPv4 149.112.112.112','149.112.112.112','IPv4',false],
+    ['QUAD9 IPv6 2620:fe::fe','2620:fe::fe','IPv6',false],
+    ['QUAD9 IPv6 2620:fe::9','2620:fe::9','IPv6',false],
+    ['QUAD9 DoH','https://dns.quad9.net/dns-query','DoH',true],
+    ['QUAD9 DoU','quic://dns.quad9.net:853','DoU',false],
+
+    ['ADGUARD IPv4 94.140.14.14','94.140.14.14','IPv4',false],
+    ['ADGUARD IPv4 94.140.15.15','94.140.15.15','IPv4',false],
+    ['ADGUARD IPv6 2a10:50c0::ad1:ff','2a10:50c0::ad1:ff','IPv6',false],
+    ['ADGUARD IPv6 2a10:50c0::ad2:ff','2a10:50c0::ad2:ff','IPv6',false],
+    ['ADGUARD DoH','https://dns.adguard.com/dns-query','DoH',true],
+    ['ADGUARD DoU','quic://dns.adguard.com:853','DoU',false],
+
+    ['ADGUARD FAMILY IPv4 94.140.14.15','94.140.14.15','IPv4',false],
+    ['ADGUARD FAMILY IPv4 94.140.15.16','94.140.15.16','IPv4',false],
+    ['ADGUARD FAMILY DoU','quic://family.adguard-dns.com:853','DoU',false],
+
+    ['NEXTDNS IPv4 45.90.28.0','45.90.28.0','IPv4',false],
+    ['NEXTDNS IPv4 45.90.30.0','45.90.30.0','IPv4',false],
+    ['NEXTDNS IPv6 2a07:a8c0::','2a07:a8c0::','IPv6',false],
+    ['NEXTDNS IPv6 2a07:a8c1::','2a07:a8c1::','IPv6',false],
+    ['NEXTDNS DoH','https://dns.nextdns.io/','DoH',true],
+    ['NEXTDNS DoU','quic://dns.nextdns.io:853','DoU',false],
+
+    ['DNSPOD IPv4 119.29.29.29','119.29.29.29','IPv4',false],
+    ['DNSPOD IPv4 119.28.28.28','119.28.28.28','IPv4',false],
+    ['DNSPOD IPv6 2402:4e00::','2402:4e00::','IPv6',false],
+    ['DNSPOD DoH','https://doh.pub/dns-query','DoH',true],
+    ['DNSPOD DoU','quic://dns.pub:853','DoU',false],
+
+    ['MULLVAD IPv4 194.242.2.2','194.242.2.2','IPv4',false],
+    ['MULLVAD IPv4 193.19.108.2','193.19.108.2','IPv4',false],
+    ['MULLVAD IPv6 2a07:e340::2','2a07:e340::2','IPv6',false],
+    ['MULLVAD IPv6 2a07:e340::3','2a07:e340::3','IPv6',false],
+    ['MULLVAD DoH','https://doh.mullvad.net/dns-query','DoH',true],
+    ['MULLVAD DoU','quic://dns.mullvad.net:853','DoU',false],
+
+    ['CONTROLD IPv4 76.76.2.0','76.76.2.0','IPv4',false],
+    ['CONTROLD IPv4 76.76.10.0','76.76.10.0','IPv4',false],
+    ['CONTROLD IPv6 2606:1a40::','2606:1a40::','IPv6',false],
+    ['CONTROLD IPv6 2606:1a40:1::','2606:1a40:1::','IPv6',false],
+    ['CONTROLD DoH','https://freedns.controld.com/p0','DoH',true],
+    ['CONTROLD DoU','quic://freedns.controld.com:853','DoU',false],
+
+    ['ALIDNS IPv4 223.5.5.5','223.5.5.5','IPv4',false],
+    ['ALIDNS IPv4 223.6.6.6','223.6.6.6','IPv4',false],
+    ['ALIDNS IPv6 2400:3200::1','2400:3200::1','IPv6',false],
+    ['ALIDNS IPv6 2400:3200:baba::1','2400:3200:baba::1','IPv6',false],
+    ['ALIDNS DoH','https://dns.alidns.com/dns-query','DoH',true],
+    ['ALIDNS DoU','quic://dns.alidns.com:853','DoU',false],
+
+    ['DNS0 IPv4 193.110.81.0','193.110.81.0','IPv4',false],
+    ['DNS0 IPv4 185.253.5.0','185.253.5.0','IPv4',false],
+    ['DNS0 IPv6 2a0f:fc80::','2a0f:fc80::','IPv6',false],
+    ['DNS0 IPv6 2a0f:fc81::','2a0f:fc81::','IPv6',false],
+    ['DNS0 DoH','https://dns0.eu/dns-query','DoH',true],
+    ['DNS0 DoU','quic://dns0.eu:853','DoU',false]
+  ];
+}
+
+async function scanDnsTargets(){
+  const targets=allDnsTargets();
+
+  const results=await Promise.all(targets.map(async ([label,address,type,testable])=>{
+    if(!testable){
+      return {label,address,type,ms:null,ok:false,status:'Browser blocked'};
+    }
+
+    const r=await timedFetch(label,address,9000);
+
+    return {
+      label,
+      address,
+      type,
+      ms:r.ms,
+      ok:r.ok,
+      status:r.ok ? `${r.ms} ms` : 'FAILED'
+    };
+  }));
+
+  return results;
+}
+
+function dnsRow(r){
+  const isMeta = r.type === 'INFO' || r.type === 'BEST';
+  const rowClass = isMeta ? (r.type === 'BEST' ? 'dns-row dns-best' : 'dns-row dns-info') : 'dns-row';
+  const pingHtml = r.ok
+    ? `<div class="dns-ping ${pingClass(r.ms)}">${esc(r.ms)} ms</div>`
+    : `<div class="dns-ping bad"><span class="dns-warning">⚠</span></div>`;
+
+  return `
+    <div class="${rowClass}">
+      <div class="dns-main">
+        <div class="dns-name">${esc(r.label)}</div>
+        <div class="dns-address">${esc(r.address)}</div>
+      </div>
+      ${pingHtml}
+      <div class="dns-type">${esc(r.type)}</div>
+    </div>
+  `;
+}
+
+function renderDnsRows(rows){
+  dnsLastRows=rows;
+  const shown=dnsExpanded ? rows : rows.slice(0,10);
+
+  const html=[
+    row('Shown',dnsExpanded ? `All ${rows.length} DNS records` : `10 of ${rows.length} DNS records`,'sky'),
+    ...shown.map(r=>dnsRow(r))
+  ];
+
+  if(rows.length>10){
+    html.push(`<button class="see-more" type="button" onclick="toggleDnsList()">${dnsExpanded ? 'See less' : 'See more'}</button>`);
+  }
+
+  $('latency').innerHTML=html.join('');
+}
+
+function sparkleSeeMore(btn){
+  btn.querySelectorAll('.sparkle').forEach(x=>x.remove());
+
+  const points=[
+    [42,42],
+    [50,34],
+    [58,43],
+    [47,55],
+    [55,58]
+  ];
+
+  points.forEach(([x,y],i)=>{
+    const s=document.createElement('span');
+    s.className='sparkle';
+    s.style.left=x+'%';
+    s.style.top=y+'%';
+    s.style.animationDelay=(i*35)+'ms';
+    btn.appendChild(s);
+    setTimeout(()=>s.remove(),500);
+  });
+}
+
+function toggleDnsList(){
+  const btn=document.querySelector('.see-more');
+  if(btn){
+    sparkleSeeMore(btn);
+  }
+
+  window.setTimeout(()=>{
+    dnsExpanded=!dnsExpanded;
+    renderDnsRows(dnsLastRows);
+  },180);
+}
+
+function launchSpaceship(){
+  document.querySelectorAll('.spaceship-fly').forEach(x=>x.remove());
+
+  const ship=document.createElement('div');
+  ship.className='spaceship-fly';
+  ship.innerHTML='<img src="https://files.catbox.moe/tkenq2.gif" alt="spaceship">';
+  document.body.appendChild(ship);
+
+  window.setTimeout(()=>{
+    ship.remove();
+  },5200);
+}
+
+async function run(){
+  setBar(5);
+  updateDisguise(0);
+  dnsExpanded=false;
+
+  card('geo','RUNNING',[row('Status','Checking exit IP...','cyan')]);
+  card('browser','RUNNING',[row('Status','Collecting browser signals...','cyan')]);
+  card('latency','RUNNING',[row('Status','Scanning all DNS records...','cyan')]);
+  card('speed','RUNNING',[row('Status','Waiting...','cyan')]);
+  $('issues').innerHTML='<div class="issue"><p>RUNNING</p></div>';
+  card('final','RUNNING',[row('Status','Not ready','cyan')]);
+
+  const data=await getGeoData();
+  setBar(30);
+
+  const version=ipVersion(data.ip);
+  const asn=data.asn||'N/A';
+  const country=`${flag(data.country_code)} ${data.country||'N/A'}`;
+  const problems=detectProblems(data);
+  const disguise=Math.max(0,100-problems.reduce((s,p)=>s+p.penalty,0));
+
+  updateDisguise(disguise);
+  renderIssues(problems);
+
+  card('geo','VPN location🚪',[
+    row('IP',data.ip,'sky'),
+    row('IP Version',version,version==='IPv6'?'cyan':'green'),
+    row('Country',country,'gold'),
+    row('Region',data.region,'green'),
+    row('City',data.city,'green'),
+    row('Timezone',data.timezone,'sky'),
+    row('ISP',data.isp,'yellow'),
+    row('Org',data.org,'yellow'),
+    row('ASN',asn,'orange'),
+    row('VPN/Proxy',data.vpn?'YES':'NO',data.vpn?'red':'green'),
+    row('Hosting/DC',data.hosting?'YES':'NO',data.hosting?'red':'green')
+  ]);
+
+  card('browser','BROWSER PRIVACY SIGNALS',[
+    row('User Agent',navigator.userAgent,'sky'),
+    row('Platform',navigator.platform||'N/A','gold'),
+    row('Language',navigator.language||'N/A','cyan'),
+    row('Languages',(navigator.languages||[]).join(', '),'sky'),
+    row('Screen',`${screen.width}x${screen.height} DPR ${devicePixelRatio}`,'gold'),
+    row('Browser TZ',Intl.DateTimeFormat().resolvedOptions().timeZone||'N/A','sky'),
+    row('CPU Threads',navigator.hardwareConcurrency||'N/A','orange')
+  ]);
+
+  setBar(45);
+
+  const dnsResults=await scanDnsTargets();
+  const best=bestDns(dnsResults);
+
+  renderDnsRows([
+    {label:'Scan Mode',address:`All DNS records | Exit ${version}`,type:'INFO',ms:null,ok:false,status:'Complete'},
+    {label:'Fastest',address:best?`${best.label} | ${best.address}`:'N/A',type:'BEST',ms:best?.ms||null,ok:!!best,status:best?`${best.ms} ms`:'No reachable DoH'},
+    ...dnsResults
+  ]);
+
+  setBar(75);
+
+  const dl=await tinyDownload();
+
+  card('speed','⬇️TINY DOWNLOAD TEST',[
+    row(
+      'Download',
+      dl.mbps==='FAILED' ? 'FAILED' : `${dl.mbps} Mbps`,
+      dl.mbps==='FAILED' ? 'red' : (+dl.mbps>=5 ? 'green' : (+dl.mbps>=1 ? 'gold' : 'orange'))
+    ),
+    row('Traffic Used','about 0.5 MB','orange'),
+    row('Upload','Not possible safely in static browser file','muted')
+  ]);
+
+  setBar(90);
+
+  const level=disguise>=75?['GOOD','green']:disguise>=50?['MEDIUM','yellow']:['WEAK','red'];
+
+  card('final','FINAL RESULT',[
+    row('Your disguise',`${disguise}% ${level[0]}`,level[1]),
+    row('Status',disguise>=75?'Safe':'Not Safe',disguise>=75?'green':'red'),
+    row('IP Version',version,version==='IPv6'?'cyan':'green'),
+    row('Exit',`${country} / ${data.city}`,'sky'),
+    row('Fastest DNS',best?`${best.label} - ${best.ms} ms`:'N/A',best?'green':'red'),
+    row('DNS Records',`${dnsResults.length} scanned / browser-tested where possible`,'yellow'),
+    row('Problems',problems.length?`${problems.length} issue(s) detected`:'No major issue','yellow'),
+    row('DNS Leak','Browser-only page cannot test real DNS leak','muted'),
+    row('Config Nodes','Browser cannot read sing-box config','muted')
+  ]);
+
+  setBar(100);
+  launchSpaceship();
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const runBtn=document.getElementById('run');
+
+  if(runBtn){
+    runBtn.addEventListener('click',()=>{
+      run().catch(err=>{
+        console.error(err);
+        const final=document.getElementById('final');
+        if(final){
+          final.innerHTML='<div class="row"><div class="k">Error</div><div class="v red">'+String(err.message||err)+'</div></div>';
+        }
+      });
+    });
+  }
+
+  run().catch(err=>{
+    console.error(err);
+    const final=document.getElementById('final');
+    if(final){
+      final.innerHTML='<div class="row"><div class="k">Error</div><div class="v red">'+String(err.message||err)+'</div></div>';
+    }
+  });
+});
+</script>
+</body>
+</html>
