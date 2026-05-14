@@ -2082,7 +2082,7 @@ function renderDnsRows(rows){
   const shown = dnsExpanded ? rows : rows.slice(0,10);
 
   const html = [
-    `<div class="row dns-expert-link-row"><div class="k"><a class="expert-dns-link" href="https://dan0tech.github.io/test/" target="_blank" rel="noopener noreferrer">Expert DNS test</a></div><div class="v sky">${esc(dnsExpanded ? 'All '+actualCount+' DNS records' : '10 of '+actualCount+' DNS records')}</div></div>`,
+    `<div class="row dns-expert-link-row"><div class="k"><a class="expert-dns-link" href="https://dan0tech.github.io/test/" target="_blank" rel="noopener noreferrer">Expert Test</a></div><div class="v sky">${esc(dnsExpanded ? 'All '+actualCount+' DNS records' : '10 of '+actualCount+' DNS records')}</div></div>`,
     ...shown.map(r=>dnsRow(r))
   ];
 
